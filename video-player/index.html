@@ -13,18 +13,14 @@
     <script src="play-on-vrdisplayactivate-or-enter-vr.js"></script>
     <script src="hide-once-playing.js"></script>
 
+    <script src="pip-video-components.js"></script>
+
+    
+
     <!-- Specify our scene. -->
     <a-scene>
-      <!-- The original example also has this 180 degree rotation, to appear to be going forward. -->
-      <a-videosphere rotation="0 180 0" src="#video" 
-                     play-on-window-click
-                     play-on-vrdisplayactivate-or-enter-vr>
-      </a-videosphere>
-
-      <a-video src="#video2D" width="16" height="9" position="0 0 -20"></a-video>
-      
       <!-- Define camera with zero user height, movement disabled and arrow key rotation added. -->
-      <a-camera user-height="0" wasd-controls-enabled="false" arrow-key-rotation>
+      <a-camera position="0 0 0" id="main-camera" user-height="0" wasd-controls-enabled="false" arrow-key-rotation>
         <!-- Text element for display messaging.  Hide once video is playing. -->
         <a-entity id="msg" position="0 -0.3 -1.5" text="align:center; 
                 width:3;
@@ -33,7 +29,20 @@
                 value:Click window to make the video play, if needed."
                 hide-once-playing="#video">
         </a-entity>
-      </a-camera>      
+        <!--<a-video src="#video2D" width="16" height="9" position="0 0 -20"></a-video>-->
+      </a-camera>
+
+      <!-- Picture in Picture Videoplayer 360 Video + 2D Video-->
+      <a-entity>
+        <!-- The original example also has this 180 degree rotation, to appear to be going forward. -->
+        <a-videosphere rotation="0 180 0" src="#video" 
+                       play-on-window-click
+                       play-on-vrdisplayactivate-or-enter-vr>
+        </a-videosphere>
+        <a-entity id="pivot" follow-rotation="entity: #main-camera;">
+          <a-video src="#video2D" width="16" height="9" position="0 0 -20"></a-video>
+        </a-entity>
+      </a-entity>
       
       <!-- Wait for the video to load. -->
       <a-assets>
@@ -45,7 +54,7 @@
                src="https://ucarecdn.com/fadab25d-0b3a-45f7-8ef5-85318e92a261/" />
         </video>
         <!-- Animated bunny demo video. -->
-        <video id="video2D" style="display:none" 
+        <video id="video2D" style="display:none" muted
                autoplay loop crossorigin="anonymous" playsinline webkit-playsinline>
           <!-- MP4 video source. -->
           <source type="video/mp4"
@@ -58,5 +67,11 @@
     <button onClick="window.location.href='multi-source-detail.html'" style="position:absolute;top:10px;right:10px;">
       Switch to multi-source detail example
     </button>
+
+    <!-- DEBUG -->
+    <script type="text/javascript">
+      var cam = document.getElementById("main-camera");
+      var pivot = document.getElementById("pivot");
+    </script>
   </body>
 </html>
