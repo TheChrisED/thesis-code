@@ -33,14 +33,14 @@
       </a-camera>
 
       <!-- Picture in Picture Videoplayer 360 Video + 2D Video-->
-      <a-entity>
+      <a-entity pip-video-interface="video2d: #video2d-player;">
         <!-- The original example also has this 180 degree rotation, to appear to be going forward. -->
         <a-videosphere rotation="0 180 0" src="#video" 
                        play-on-window-click
                        play-on-vrdisplayactivate-or-enter-vr>
         </a-videosphere>
         <a-entity id="pivot" follow-rotation="entity: #main-camera;">
-          <a-video src="#video2D" width="16" height="9" position="0 0 -20"></a-video>
+          <a-video id="video2d-player" src="#video2D" width="16" height="9" position="0 0 -20"></a-video>
         </a-entity>
       </a-entity>
       
