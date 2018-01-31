@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Fitts Law VR Experiment</title>
+    <meta name="description" content="360&deg; Image - A-Frame">
+    <script src="../aframe.js"></script>
+    <script src="FittsLaw.js"></script>
+  </head>
+  <body>
+    <a-scene>
+
+    <a-assets>
+
+    </a-assets>
+      <!--<a-sphere position="0 1.606 -24.629" material="color:#e80117"></a-sphere>-->
+      <a-entity>
+          <a-sphere position="0 27.092 -24.629" material="color:#848dda" id="top" class="targets"></a-sphere>
+          <a-sphere position="0 -22.185 -24.629" material="color:#848dda" id="bottom" class="targets"></a-sphere>
+          <a-sphere position="-23.171 1.586 -24.629" material="color:#848dda" id="left" class="targets"></a-sphere>
+          <a-sphere position="27.947 1.586 -24.629" material="color:#848dda" id="right" class="targets"></a-sphere>
+          <a-sphere position="18.15 19.404 -24.629" material="color:#848dda" id="top-right" class="targets"></a-sphere>
+          <a-sphere position="17.948 -14.65 -24.629" material="color:#848dda" id="bottom-right" class="targets"></a-sphere>
+          <a-sphere position="-14.153 -14.921 -24.629" material="color:#848dda" id="bottom-left" class="targets"></a-sphere>
+          <a-sphere position="-14.131 19.08 -24.629" material="color:#848dda" id="top-left" class="targets"></a-sphere>
+          <a-sphere position="0 1.606 -24.629" material="color:#e80117" fitts-law="targets: .targets; speed: 20.0" id="follow"></a-sphere>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>

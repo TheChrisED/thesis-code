@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>aframe-material😲😆😛</title>
+    <meta name="description" content="Aframe-Material">
+    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+    <script src="https://rawgit.com/mayognaise/aframe-mouse-cursor-component/master/dist/aframe-mouse-cursor-component.min.js"></script>
+    <!--<script src="https://cdn.rawgit.com/zcanter/aframe-gradient-sky/master/dist/gradientsky.min.js"></script>-->
+    <script src="aframe-material.js"></script>
+    <script type="text/javascript">
+      AFRAME.ASSETS_PATH = "./assets";
+    </script>
+  </head>
+  <body>
+    <a-scene stats="true">
+      <a-assets>
+        <img id="groundTexture" src="https://cdn.aframe.io/a-painter/images/floor.jpg" crossorigin="anonymous">
+        <img id="skyTexture" src="https://cdn.aframe.io/a-painter/images/sky.jpg" crossorigin="anonymous">
+      </a-assets>
+
+      <a-box position="0 3 -5" color="red"></a-box>
+      <!--<a-entity laser-controls="hand: right"></a-entity>-->
+
+      <a-entity light="type: point; intensity: 0.75; distance: 50; decay: 2"
+          position="0 0 0"></a-entity>
+      <a-entity light="type: directional;" position="-1 1 0"></a-entity>
+      <a-entity light="type: ambient; intensity: 0.1"></a-entity>
+
+      <a-entity> <a-camera look-controls-enabled wasd-controls-enabled mouse-cursor>
+        <a-entity cursor="fuse: false; fuseTimeout: 500"
+            position="0 0 -1"
+            geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+            material="color: black; shader: flat">
+        </a-entity>
+      </a-camera></a-entity>
+
+      <!-- BEGIN INPUTS/KEYBOARD -->
+      <!--<a-keyboard physical-keyboard="true" position="0 0.5 0"></a-keyboard>-->
+      <a-input position="-0.7 2.0 -2.5" placeholder="Username" color="black" width="1"></a-input>
+      <a-input position="-0.7 1.7 -2.5" type="password" placeholder="Password" color="black" width="1"></a-input>
+      <!-- END INPUTS/KEYBOARD -->
+
+      <!-- BEGIN FORM -->
+      <a-rounded position="0.5 1.5 -2.5" width="4" height="3.1" radius="0.05" rotation="0 -20 0" scale="0.3 0.3 0.3">
+      <!--<a-entity geometry="primitive: plane; height: 10; width: 10" material="side: double" position="0.5 1.5 -2.5">-->
+        <a-form>
+          <a-switch position="0.2 2.7 0" enabled="true"></a-switch>
+          <a-radio position="0.2 2.4 0" width="3" name="food" label="Burger with fries and pizza" value="pizza"></a-radio>
+          <a-radio position="0.2 2.1 0" width="3" name="food" label="Veggies" checked="true" disabled="true"></a-radio>
+          <a-radio position="0.2 1.8 0" width="3" name="food" label="Ice cream"></a-radio>
+          <a-checkbox position="0.2 1.5 0" width="3" name="stuff" label="I am a checkbox" checked="true"></a-checkbox>
+          <a-checkbox position="0.2 1.2 0" width="3" name="stuff" label="And I am another one" checked="true" disabled="true"></a-checkbox>
+          <a-button position="0.2 0.8 0" name="stuff" value="Click me" type="raised"></a-button>
+          <a-button position="0.2 0.35 0" width="3" name="stuff" value="You cannot click me" disabled="true"></a-button>
+        </a-form>
+      </a-rounded>
+      <!--</a-entity>-->
+      <!-- END FORM -->
+
+      <!-- BEGIN TOAST -->
+      <a-toast message="This is a toast" action="Got it"></a-toast>
+      <!-- END TOAST -->
+
+      <a-sky height="2048" radius="30" src="#skyTexture" theta-length="90" width="2048"></a-sky>
+      <a-circle src="#groundTexture" rotation="-90 0 0" radius="32"></a-circle>
+
+      <!-- BEGIN ENVIRONEMENT -->
+      <!--<a-gradient-sky material="shader: gradient; topColor: 255 0 0; bottomColor: 0 121 255;"></a-gradient-sky>-->
+      <!-- END ENVIRONEMENT -->
+    </a-scene>
+    <script type="text/javascript">
+      var button = document.querySelector('a-button');
+      var toast = document.querySelector('a-toast');
+      toast.addEventListener('actionclick', function(){
+        toast.hide();
+      });
+      button.addEventListener('click', function() {
+        toast.show();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>360&deg; Image</title>
+    <meta name="description" content="360&deg; Image - A-Frame">
+    <script src="../aframe.js"></script>
+    <!--<script type="text/javascript" src="interaction.js"></script>-->
+    <script type="text/javascript" src="gallery.js"></script>
+  </head>
+  <body>
+    <a-scene>
+
+    <a-assets>
+      <video id="test-video" crossorigin="anonymous" autoplay loop="true" src="https://ucarecdn.com/fadab25d-0b3a-45f7-8ef5-85318e92a261/">
+
+    </a-assets>
+      <!--<a-videosphere src="#test-video"></a-videosphere>-->
+
+      <a-sky src="puydesancy.jpg" rotation="0 -130 0" skybox-gallery="SonyCenter_360panorama.jpg" id="skybox"></a-sky>
+
+      <a-text font="kelsonsans" value="Puy de Sancy, France" width="6" position="-2.5 0.25 -1.5"
+              rotation="0 15 0"></a-text>
+    </a-scene>
+  </body>
+</html>
