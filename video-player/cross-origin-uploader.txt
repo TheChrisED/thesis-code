@@ -1,0 +1,4 @@
+Videos aus dem Internet können in A-Frame meist nicht direkt eingebunden werden. Problem ist, dass die Videos nicht nur eingebettet werden, sondern komplett geladen werden müssen um sie als Textur in WebGL zu nutzen. Das wird aber von der Same Origin Policy verhindert.
+Videos und anderer Content kann einfach über den A-Frame Uploader hochgeladen werden (Nutzung in A-Frame funktioniert, da der Provider UploadCare ein Content Delivery Network ist und Daten auch Cross Origin bereit stellt):
+
+https://cdn.aframe.io

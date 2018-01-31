@@ -21,7 +21,7 @@
                      play-on-vrdisplayactivate-or-enter-vr>
       </a-videosphere>
 
-      <a-video src="#video" width="16" height="9" position="0 0 -20"></a-video>
+      <a-video src="#video2D" width="16" height="9" position="0 0 -20"></a-video>
       
       <!-- Define camera with zero user height, movement disabled and arrow key rotation added. -->
       <a-camera user-height="0" wasd-controls-enabled="false" arrow-key-rotation>
@@ -43,6 +43,13 @@
           <!-- MP4 video source. -->
           <source type="video/mp4"
                src="https://ucarecdn.com/fadab25d-0b3a-45f7-8ef5-85318e92a261/" />
+        </video>
+        <!-- Animated bunny demo video. -->
+        <video id="video2D" style="display:none" 
+               autoplay loop crossorigin="anonymous" playsinline webkit-playsinline>
+          <!-- MP4 video source. -->
+          <source type="video/mp4"
+               src="https://ucarecdn.com/134e09bc-674a-4e0e-ab25-fd9cb2ad478c/" />
         </video>
       </a-assets>
     </a-scene>
