@@ -30,3 +30,8 @@ At present, this video file is not available in WebM format.
 The browser implementation will automatically pick which source to use.
 
 *Note that this example does not follow the above recommendation, because it is specifically trying to exercise native HLS playback... which as a result introduces compatibility issues with certain Safari versions at time of writing.*
+
+## Known Issues
+
+#### Samsung Internet Browser for Android
+* Can't play multiple videos at the same time

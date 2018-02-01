@@ -40,7 +40,10 @@
                        play-on-vrdisplayactivate-or-enter-vr>
         </a-videosphere>
         <a-entity id="pivot" follow-rotation="entity: #main-camera;">
-          <a-video id="video2d-player" src="#video2D" width="16" height="9" position="0 0 -20"></a-video>
+          <a-video id="video2d-player" src="#video2D" width="16" height="9" position="0 0 -20"
+                    play-on-window-click
+                    play-on-vrdisplayactivate-or-enter-vr>            
+          </a-video>
         </a-entity>
       </a-entity>
       
@@ -59,6 +62,8 @@
           <!-- MP4 video source. -->
           <source type="video/mp4"
                src="https://ucarecdn.com/134e09bc-674a-4e0e-ab25-fd9cb2ad478c/" />
+          <!--<source type="video/mp4"
+               src="https://ucarecdn.com/fadab25d-0b3a-45f7-8ef5-85318e92a261/" />-->
         </video>
       </a-assets>
     </a-scene>
@@ -72,6 +77,9 @@
     <script type="text/javascript">
       var cam = document.getElementById("main-camera");
       var pivot = document.getElementById("pivot");
+      var video2d = document.getElementById("video2D");
+
+      //document.addEventListener('click', function(){video2d.play();});
     </script>
   </body>
 </html>
