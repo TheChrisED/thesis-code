@@ -14,6 +14,7 @@
     <script src="hide-once-playing.js"></script>
 
     <script src="pip-video-components.js"></script>
+    <!--<script src="aframe-ui-widgets.js"></script>-->
 
     
 
@@ -29,24 +30,37 @@
                 value:Click window to make the video play, if needed."
                 hide-once-playing="#video">
         </a-entity>
-        <!--<a-video src="#video2D" width="16" height="9" position="0 0 -20"></a-video>-->
+
+        <a-cursor></a-cursor>
       </a-camera>
 
       <!-- Picture in Picture Videoplayer 360 Video + 2D Video-->
-      <a-entity pip-video-interface="video2d: #video2d-player;">
+      <a-entity id="pip-video-interface" pip-video-interface="video360: #video360-player; video2d: #video2d-player;">
         <!-- The original example also has this 180 degree rotation, to appear to be going forward. -->
-        <a-videosphere rotation="0 180 0" src="#video" 
+        <a-videosphere id="video360-player" rotation="0 180 0" src="#video" 
                        play-on-window-click
-                       play-on-vrdisplayactivate-or-enter-vr>
+                       play-on-vrdisplayactivate-or-enter-vr
+                       synchronized-video>
         </a-videosphere>
-        <a-entity id="pivot" follow-rotation="entity: #main-camera;">
+        <a-entity id="pivot" rotation="-50 0 0" follow-rotation="entity: #main-camera;">
           <a-video id="video2d-player" src="#video2D" width="16" height="9" position="0 0 -20"
                     play-on-window-click
-                    play-on-vrdisplayactivate-or-enter-vr>            
+                    play-on-vrdisplayactivate-or-enter-vr
+                    synchronized-video>            
           </a-video>
+        </a-entity>
+        <a-entity id="video-ui-controls" visible="true" pip-video-controls="controller: #pip-video-interface; playPauseButton: #play-pause-button;">
+          <a-entity id="play-pause-button" position="0 0 -10" geometry="primitive: box; width: 2; height: 2; depth: 2;" material="shader:flat; color:tomato"></a-entity>
+          <!--<a-entity position="0 0 -1" ui-slider="min: 0; max: 1; value: 0; size:3; innerSize: 5;"></a-entity>
+          <a-entity position="0 -3 -2" ui-button="size: 3;"></a-entity>-->
         </a-entity>
       </a-entity>
       
+
+
+      <!-- ------------------------ ASSETS -------------------- -->
+
+
       <!-- Wait for the video to load. -->
       <a-assets>
         <!-- Single source video. -->
@@ -62,8 +76,6 @@
           <!-- MP4 video source. -->
           <source type="video/mp4"
                src="https://ucarecdn.com/134e09bc-674a-4e0e-ab25-fd9cb2ad478c/" />
-          <!--<source type="video/mp4"
-               src="https://ucarecdn.com/fadab25d-0b3a-45f7-8ef5-85318e92a261/" />-->
         </video>
       </a-assets>
     </a-scene>
@@ -78,8 +90,6 @@
       var cam = document.getElementById("main-camera");
       var pivot = document.getElementById("pivot");
       var video2d = document.getElementById("video2D");
-
-      //document.addEventListener('click', function(){video2d.play();});
     </script>
   </body>
 </html>

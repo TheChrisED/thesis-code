@@ -12,5 +12,6 @@ AFRAME.registerComponent('play-on-window-click', {
     var video = this.el.components.material.material.map.image;
     if (!video) { return; }
     video.play();
+    window.removeEventListener("click", this.onClick);
   }
 });
