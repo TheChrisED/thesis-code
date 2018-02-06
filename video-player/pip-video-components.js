@@ -163,3 +163,72 @@ AFRAME.registerComponent('synchronized-video', {
     video.play();
   }
 });
+
+AFRAME.registerComponent('button', {
+  schema: {
+    width: {default: "1"},
+    heigth: {default: "1"},
+    clickedColor: {default: "green"},
+    clickedState: {type: "selector"}, // Mixin defining clicked State
+    pressedState: {type: "selector"},
+    hoverState: {type: "selector"},
+  },
+  dependencies: ["geometry", "material"],
+  buttonStates: {
+    PRESSED: "pressed", // Whenever button is being held down, upon release the button is not pressed anymore
+    CLICKED: "clicked", // Buttons assumes this state after it gets clicked for the first time and every other time afterwards
+    ORIGINAL: "original", // Default state for a button, when it has not been clicked. When a clicked button gets clicked again, the state reverts back to original
+    HOVER: "hover",
+  },
+  init: function () {
+    document.addEventListener("click", this.onClick.bind(this));
+
+    this.buttonState = this.buttonStates.ORIGINAL;
+    // Fake Mixin to save original appearance
+    this.originalAppearance = {};
+    this.originalAppearance.componentCache = {
+      material: this.el.getAttribute("material"),
+      geometry: this.el.getAttribute("geometry"),
+    };
+  },
+  update: function(oldData) {
+  },
+  play: function () {
+  },
+  onClick: function(event) {
+    console.log("Click Event fired by Button");
+    if (this.buttonState == this.buttonStates.ORIGINAL) {
+      this.changeButtonState(this.buttonStates.CLICKED);
+    }
+    else {
+      this.changeButtonState(this.buttonStates.ORIGINAL);
+    }
+
+  },
+  changeButtonState: function(newState) {
+    this.buttonState = newState;
+    if (newState == this.buttonStates.ORIGINAL) {
+      this.applyMixin(this.originalAppearance);
+    } 
+    else if (newState == this.buttonStates.PRESSED) {
+      this.applyMixin(this.data.pressedState);
+    }
+    else if (newState == this.buttonStates.CLICKED) {
+      this.applyMixin(this.data.clickedState);
+    }
+    else if (newState == this.buttonStates.HOVER) {
+      this.applyMixin(this.data.hoverState);
+    }
+  },
+  applyMixin: function(mixin) {
+    if (mixin) {
+      Object.keys(mixin.componentCache).forEach(function(key){
+        this.el.setAttribute(key, mixin.componentCache[key]);
+      }.bind(this));
+    }
+  },
+  pause: function () {         
+  },
+  tick: function (time, deltaTime) {
+  },
+});
