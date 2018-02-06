@@ -49,11 +49,7 @@
                     synchronized-video>            
           </a-video>
         </a-entity>
-        <a-entity id="video-ui-controls" visible="true" pip-video-controls="controller: #pip-video-interface; playPauseButton: #play-pause-button;">
-          <a-entity id="play-pause-button" position="0 0 -10" geometry="primitive: box; width: 2; height: 2; depth: 2;" material="shader:flat; color:tomato"></a-entity>
-          <a-entity button="clickedState: #green;" position="0 0 -5" geometry="primitive: plane; width: 1; height: 1;" material="color:red"></a-entity>
-          <!--<a-entity position="0 0 -1" ui-slider="min: 0; max: 1; value: 0; size:3; innerSize: 5;"></a-entity>
-          <a-entity position="0 -3 -2" ui-button="size: 3;"></a-entity>-->
+        <a-entity id="video-ui-controls" visible="true" pip-video-controls="controller: #pip-video-interface;">
         </a-entity>
       </a-entity>
       

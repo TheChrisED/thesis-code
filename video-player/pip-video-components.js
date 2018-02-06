@@ -66,13 +66,15 @@ AFRAME.registerComponent('pip-video-interface', {
   bringUpControls: function() {
     if (!this.controlsVisible) {
       if(!this.uiComponent) {return;}
-      this.uiComponent.el.setAttribute("visible", "true");
+      this.uiComponent.bringUpControls();
+      // this.uiComponent.el.setAttribute("visible", "true");
       this.controlsVisible = true;
       this.activateTimeout();
     }
   },
   hideControls: function() {
-    this.uiComponent.el.setAttribute("visible", "false");
+    // this.uiComponent.el.setAttribute("visible", "false");
+    this.uiComponent.hideControls();
     this.controlsVisible = false;
     this.pauseTimeout();
   },
@@ -106,11 +108,30 @@ AFRAME.registerComponent('pip-video-interface', {
 AFRAME.registerComponent('pip-video-controls', {
   schema: {
     controller: {type: "selector"},
-    playPauseButton: {type: "selector"}
   },
   init: function () {
-    this.data.playPauseButton.addEventListener("click", this.playPause.bind(this));
+    if(!this.el.getAttribute("visible")) {
+      this.el.setAttribute("visible", "false");
+    }
+    this.uiElements = [];
+
+    var assets = document.createElement("a-assets");
+    var tomatoColorMixin = document.createElement("a-mixin");
+    tomatoColorMixin.setAttribute("id", "tomatoColor");
+    tomatoColorMixin.setAttribute("material", "color: tomato");
+    assets.appendChild(tomatoColorMixin);
+    this.el.sceneEl.appendChild(assets);
     
+    this.playPauseButton = document.createElement("a-entity");
+    this.playPauseButton.setAttribute("material", {color: "blue"});
+    this.playPauseButton.setAttribute("geometry", {primitive: "plane", width: 1, height: 1,});
+    this.playPauseButton.setAttribute("position", {x: 0, y: 0, z:-2});
+    this.playPauseButton.setAttribute("button", {clickedState: "#tomatoColor"});
+
+    this.el.appendChild(this.playPauseButton);
+
+    this.uiElements.push(this.playPauseButton);
+    this.playPauseButton.addEventListener("click", this.playPause.bind(this));
   },
   play: function () {
     this.data.controller.components["pip-video-interface"].registerUI(this);
@@ -120,15 +141,29 @@ AFRAME.registerComponent('pip-video-controls', {
   tick: function (time, deltaTime) {
   },
   bringUpControls: function() {
-    if (!this.controlsVisible) {
-      this.data.uiControls.setAttribute("visible", "true");
-      this.controlsVisible = true;
-    }
+    this.el.setAttribute("visible", "true");
+    this.controlsVisible = true;
+    this.enableUI();
+  },
+  hideControls: function() {
+    this.el.setAttribute("visible", "false");
+    this.controlsVisible = false;
+    this.disableUI();
   },
   playPause: function() {
     var interfaceComponent = this.data.controller.components["pip-video-interface"];
     interfaceComponent.toggleVideos();
-  }
+  },
+  disableUI: function() {
+    this.uiElements.forEach(function(element) {
+      element.pause();
+    });
+  },
+  enableUI: function() {
+    this.uiElements.forEach(function(element) {
+      element.play();
+    });
+  },
 });
 
 // ------- SYNCHRONIZED VIDEO PLAYBACK -------
@@ -181,7 +216,7 @@ AFRAME.registerComponent('button', {
     HOVER: "hover",
   },
   init: function () {
-    document.addEventListener("click", this.onClick.bind(this));
+    this.el.addEventListener("click", this.onClick.bind(this));
 
     this.buttonState = this.buttonStates.ORIGINAL;
     // Fake Mixin to save original appearance
@@ -194,6 +229,14 @@ AFRAME.registerComponent('button', {
   update: function(oldData) {
   },
   play: function () {
+    console.log("Play called!");
+    //this.el.addEventListener("click", this.onClick.bind(this));
+  },
+  pause: function () {   
+    console.log("Pause called!"); 
+    //this.el.removeEventListener("click", this.onClick.bind(this));     
+  },
+  tick: function (time, deltaTime) {
   },
   onClick: function(event) {
     console.log("Click Event fired by Button");
@@ -226,9 +269,5 @@ AFRAME.registerComponent('button', {
         this.el.setAttribute(key, mixin.componentCache[key]);
       }.bind(this));
     }
-  },
-  pause: function () {         
-  },
-  tick: function (time, deltaTime) {
   },
 });
