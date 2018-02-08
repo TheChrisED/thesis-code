@@ -309,7 +309,7 @@ AFRAME.registerComponent('slider', {
   init: function () {
     var buttonSize = 0.75;
     this.sliderButton = document.createElement("a-entity");
-    this.el.appendChild(this.sliderButton);
+    
     //this.applyMixinTo(this.data.buttonOriginalState, this.sliderButton);
     this.sliderButton.setAttribute("material", {color: "tomato"});
     this.sliderButton.setAttribute("geometry", {
@@ -317,12 +317,13 @@ AFRAME.registerComponent('slider', {
       width: this.data.height*buttonSize,
       height: this.data.height*buttonSize,
     });
-    this.sliderButton.setAttribute("position", {x: 0, y: 0, z: 0.1});
-    this.sliderButton.setAttribute("button", {
-      clickedState: this.data.buttonClickedState,
-      pressedState: this.data.buttonPressedState,
-      hoverState: this.data.buttonHoverState,
-    });
+    this.sliderButton.setAttribute("position", {x: 0, y: 0, z: 0.01});
+    // this.sliderButton.setAttribute("button", {
+    //   clickedState: this.data.buttonClickedState,
+    //   pressedState: this.data.buttonPressedState,
+    //   hoverState: this.data.buttonHoverState,
+    // });
+    this.el.appendChild(this.sliderButton);
     
     this.moveSlider(0.25);
   },
@@ -344,7 +345,8 @@ AFRAME.registerComponent('slider', {
   moveSlider: function(value) {
     var normalizedValue = value - this.data.minValue / (this.data.maxValue - this.data.minValue);
     var position = this.convertRange(value, this.data.minValue, this.data.maxValue, -this.data.width/2, this.data.width/2);
-    this.sliderButton.setAttribute("position", {x:position});
+    var lastPosition = this.sliderButton.getAttribute("position");
+    this.sliderButton.setAttribute("position", {x:position, y:lastPosition.y, z: lastPosition.z});
   },
   normalize: function(value, minValue, maxValue) {
     return value - minValue / (maxValue - minValue);
