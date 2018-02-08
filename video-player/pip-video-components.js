@@ -324,7 +324,7 @@ AFRAME.registerComponent('slider', {
       hoverState: this.data.buttonHoverState,
     });
     
-    this.moveSlider(0.25);
+    //this.moveSlider(0.25);
   },
   update: function(oldData) {
   },
