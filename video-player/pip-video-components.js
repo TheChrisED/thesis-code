@@ -126,7 +126,7 @@ AFRAME.registerComponent('pip-video-controls', {
     this.playPauseButton = document.createElement("a-entity");
     this.playPauseButton.setAttribute("material", {color: "green"});
     this.playPauseButton.setAttribute("geometry", {primitive: "plane", width: 1, height: 1,});
-    this.playPauseButton.setAttribute("position", {x: 0, y: 10, z:-2});
+    this.playPauseButton.setAttribute("position", {x: 0, y: 0.5, z:-2});
     this.playPauseButton.setAttribute("button", {clickedState: "#tomatoColor"});
 
     // Slider
