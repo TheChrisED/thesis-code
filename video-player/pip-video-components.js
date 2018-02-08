@@ -122,15 +122,36 @@ AFRAME.registerComponent('pip-video-controls', {
     assets.appendChild(tomatoColorMixin);
     this.el.sceneEl.appendChild(assets);
     
+    // Play Pause Button
     this.playPauseButton = document.createElement("a-entity");
-    this.playPauseButton.setAttribute("material", {color: "blue"});
+    this.playPauseButton.setAttribute("material", {color: "green"});
     this.playPauseButton.setAttribute("geometry", {primitive: "plane", width: 1, height: 1,});
-    this.playPauseButton.setAttribute("position", {x: 0, y: 0, z:-2});
+    this.playPauseButton.setAttribute("position", {x: 0, y: 10, z:-2});
     this.playPauseButton.setAttribute("button", {clickedState: "#tomatoColor"});
 
+    // Slider
+
+    var buttonOriginalState = document.createElement("a-mixin");
+    buttonOriginalState.setAttribute("id", "sliderButtonOriginal");
+    buttonOriginalState.setAttribute("material", "color: white");
+    assets.appendChild(buttonOriginalState);
+    this.el.sceneEl.appendChild(assets);
+
+    this.slider = document.createElement("a-entity");
+    this.slider.setAttribute("position", {x: 0, y: -0.5, z:-2});
+    this.slider.setAttribute("material", {color: "blue"});
+    this.slider.setAttribute("geometry", {primitive: "plane", width: 2, height: 0.2,});
+    this.slider.setAttribute("slider", {
+      buttonOriginalState: "#sliderButtonOriginal",
+      buttonClickedState: "#tomatoColor",
+    });
+    
+
     this.el.appendChild(this.playPauseButton);
+    this.el.appendChild(this.slider);
 
     this.uiElements.push(this.playPauseButton);
+    this.uiElements.push(this.slider);
     this.playPauseButton.addEventListener("click", this.playPause.bind(this));
   },
   play: function () {
@@ -268,6 +289,76 @@ AFRAME.registerComponent('button', {
       Object.keys(mixin.componentCache).forEach(function(key){
         this.el.setAttribute(key, mixin.componentCache[key]);
       }.bind(this));
+    }
+  },
+});
+
+AFRAME.registerComponent('slider', {
+  schema: {
+    width: {default: 2},
+    height: {default: 0.2},
+    buttonOriginalState: {type: "selector"},
+    buttonClickedState: {type: "selector"}, // Mixin defining clicked State
+    buttonPressedState: {type: "selector"},
+    buttonHoverState: {type: "selector"},
+    minValue: {default: 0},
+    maxValue: {default: 1},
+    value: {default: 0.5},
+  },
+  dependencies: ["geometry", "material"],
+  init: function () {
+    var buttonSize = 0.75;
+    this.sliderButton = document.createElement("a-entity");
+    this.el.appendChild(this.sliderButton);
+    //this.applyMixinTo(this.data.buttonOriginalState, this.sliderButton);
+    this.sliderButton.setAttribute("material", {color: "tomato"});
+    this.sliderButton.setAttribute("geometry", {
+      primitive: "plane", 
+      width: this.data.height*buttonSize,
+      height: this.data.height*buttonSize,
+    });
+    this.sliderButton.setAttribute("position", {x: 0, y: 0, z: 0.1});
+    this.sliderButton.setAttribute("button", {
+      clickedState: this.data.buttonClickedState,
+      pressedState: this.data.buttonPressedState,
+      hoverState: this.data.buttonHoverState,
+    });
+    
+    this.moveSlider(0.25);
+  },
+  update: function(oldData) {
+  },
+  play: function () {
+    console.log("Play called!");
+    //this.el.addEventListener("click", this.onClick.bind(this));
+  },
+  pause: function () {   
+    console.log("Pause called!"); 
+    //this.el.removeEventListener("click", this.onClick.bind(this));     
+  },
+  tick: function (time, deltaTime) {
+  },
+  onClick: function(event) {
+
+  },
+  moveSlider: function(value) {
+    var normalizedValue = value - this.data.minValue / (this.data.maxValue - this.data.minValue);
+    var position = this.convertRange(value, this.data.minValue, this.data.maxValue, -this.data.width/2, this.data.width/2);
+    this.sliderButton.setAttribute("position", {x:position});
+  },
+  normalize: function(value, minValue, maxValue) {
+    return value - minValue / (maxValue - minValue);
+  },
+  convertRange: function(oldValue, oldMin, oldMax, newMin, newMax) {
+    var oldRange = (oldMax - oldMin); 
+    var newRange = (newMax - newMin);
+    return (((oldValue - oldMin) * newRange) / oldRange) + newMin;
+  },
+  applyMixinTo: function(mixin, element) {
+    if (mixin) {
+      Object.keys(mixin.componentCache).forEach(function(key){
+        element.setAttribute(key, mixin.componentCache[key]);
+      });
     }
   },
 });
