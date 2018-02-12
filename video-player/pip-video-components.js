@@ -330,6 +330,7 @@ AFRAME.registerComponent('slider', {
     });
     
     //this.moveSlider(0.25);
+    this.el.addEventListener("click", this.onClick.bind(this));
   },
   update: function(oldData) {
   },
@@ -345,12 +346,23 @@ AFRAME.registerComponent('slider', {
   tick: function (time, deltaTime) {
   },
   onClick: function(event) {
-
+    var localPos = new THREE.Vector3(
+      event.detail.intersection.point.x,
+      event.detail.intersection.point.y,
+      event.detail.intersection.point.z);
+    
+    this.el.object3D.worldToLocal(localPos);
+    this.moveSliderTo(localPos.x);
   },
   moveSlider: function(value) {
+    this.value = value;
     var normalizedValue = value - this.data.minValue / (this.data.maxValue - this.data.minValue);
     var position = this.convertRange(value, this.data.minValue, this.data.maxValue, -this.data.width/2, this.data.width/2);
     this.sliderButton.setAttribute("position", {x:position, y: this.sliderButtonY, z: this.sliderButtonZ});
+  },
+  moveSliderTo: function(positionX) {
+    var value = this.convertRange(positionX, -this.data.width/2, this.data.width/2, this.data.minValue, this.data.maxValue);
+    this.moveSlider(value);
   },
   normalize: function(value, minValue, maxValue) {
     return value - minValue / (maxValue - minValue);
