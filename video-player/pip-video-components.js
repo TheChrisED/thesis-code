@@ -146,9 +146,28 @@ AFRAME.registerComponent('pip-video-controls', {
       buttonClickedState: "#tomatoColor",
     });
     
+    // Dimmer
+
+    var dimmerSize = 10;
+    this.dimmer = document.createElement("a-entity");
+    this.dimmer.setAttribute("geometry", {
+      primitive: "box",
+      width: dimmerSize,
+      height: dimmerSize,
+      depth: dimmerSize,
+    });
+    this.dimmer.setAttribute("material", {
+      shader: "flat",
+      side: "back",
+      transparent: true,
+      color: "black",
+      opacity: 0.2,
+    });
+
 
     this.el.appendChild(this.playPauseButton);
     this.el.appendChild(this.slider);
+    this.el.appendChild(this.dimmer);
 
     this.uiElements.push(this.playPauseButton);
     this.uiElements.push(this.slider);
@@ -350,7 +369,7 @@ AFRAME.registerComponent('slider', {
       event.detail.intersection.point.x,
       event.detail.intersection.point.y,
       event.detail.intersection.point.z);
-    
+
     this.el.object3D.worldToLocal(localPos);
     this.moveSliderTo(localPos.x);
   },
