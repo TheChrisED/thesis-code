@@ -108,6 +108,7 @@ AFRAME.registerComponent('pip-video-interface', {
 AFRAME.registerComponent('pip-video-controls', {
   schema: {
     controller: {type: "selector"},
+    dimmerOpacity: {default: 0.2},
   },
   init: function () {
     if(!this.el.getAttribute("visible")) {
@@ -161,7 +162,7 @@ AFRAME.registerComponent('pip-video-controls', {
       side: "back",
       transparent: true,
       color: "black",
-      opacity: 0.2,
+      opacity: this.data.dimmerOpacity,
     });
 
 
