@@ -1,3 +1,25 @@
+var createMixin = function(mixinObject, id, assets) {
+  var mixin = document.createElement("a-mixin");
+  mixin.setAttribute("id", id);
+  applyToMixin(mixinObject, mixin);
+  if (assets) {
+    assets.appendChild(mixin);
+  }
+  return mixin;
+};
+
+var applyToMixin = function(mixinObject, element, asString) {
+  if (mixinObject) {
+      Object.keys(mixinObject).forEach(function(key){
+        if (asString) {
+
+        }
+        element.setAttribute(key, mixinObject[key]);
+        console.log("Applying mixin: ", element, key, mixinObject[key]);
+      }.bind(this));
+    }
+};
+
 AFRAME.registerComponent('follow-rotation', {
   schema: {
     entity: {type: "selector"},
@@ -47,6 +69,8 @@ AFRAME.registerComponent('pip-video-interface', {
     this.controlsTimeoutShort = 1 * 1000;
     this.controlsTimeout = this.controlsTimeoutMax;
     window.addEventListener("click", this.bringUpControls.bind(this));
+
+    this.data.video2d.setAttribute("floating-video-controls", {controller: "#" + this.el.getAttribute("id")});
   },
   registerUI: function(uiComponent) {
     this.uiComponent = uiComponent;
@@ -102,6 +126,61 @@ AFRAME.registerComponent('pip-video-interface', {
   pauseTimeout: function() {
     this.timeoutActive = false;
   }
+});
+
+AFRAME.registerComponent('floating-video-controls', {
+  schema: {
+    controller: {type: "selector"},
+  },
+  init: function () {
+    this.assets = document.createElement("a-assets");
+    this.testButton = document.createElement("a-mixin");
+    this.assets.appendChild(this.testButton);
+    this.maximizeButtonClicked = createMixin({
+      material: {
+        color: "blue"
+      }
+    }, "maximizeButtonClicked", this.assets);
+    this.el.sceneEl.appendChild(this.assets);
+    console.log(this.maximizeButtonClicked);
+
+    this.testButton.setAttribute("material", {color: "blue"});
+
+    // this.maximizeButton = document.createElement("a-entity");
+    // this.maximizeButton.setAttribute("button", {
+    //   clickedState:"#maximizeButtonClicked",
+    // });
+  },
+  update: function(oldData) {
+
+  },
+  play: function () {
+    this.data.controller.components["pip-video-interface"].registerUI(this);
+  },
+  pause: function () {         
+  },
+  tick: function (time, deltaTime) {
+  },
+  bringUpControls: function() {
+    this.el.setAttribute("visible", "true");
+    this.controlsVisible = true;
+    this.enableUI();
+  },
+  hideControls: function() {
+    this.el.setAttribute("visible", "false");
+    this.controlsVisible = false;
+    this.disableUI();
+  },
+  disableUI: function() {
+    this.uiElements.forEach(function(element) {
+      element.pause();
+    });
+  },
+  enableUI: function() {
+    this.uiElements.forEach(function(element) {
+      element.play();
+    });
+  },
 });
 
 // Takes care of View responsibilities (MVC pattern) for Video Interface
@@ -257,6 +336,7 @@ AFRAME.registerComponent('button', {
     HOVER: "hover",
   },
   init: function () {
+
     this.el.addEventListener("click", this.onClick.bind(this));
 
     this.buttonState = this.buttonStates.ORIGINAL;
@@ -312,6 +392,7 @@ AFRAME.registerComponent('button', {
     }
   },
 });
+
 
 AFRAME.registerComponent('slider', {
   schema: {
