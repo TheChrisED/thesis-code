@@ -141,6 +141,11 @@ AFRAME.registerComponent('floating-video-controls', {
         color: "blue"
       }
     }, "maximizeButtonClicked", this.assets);
+
+    this.maxButt = document.createElement("a-entity");
+    this.maxButt.setAttribute("button", {clickedStateObject: {color: "blue"}});
+    this.el.appendChild(this.maxButt);
+
     this.el.sceneEl.appendChild(this.assets);
     console.log(this.maximizeButtonClicked);
 
@@ -327,6 +332,10 @@ AFRAME.registerComponent('button', {
     clickedState: {type: "selector"}, // Mixin defining clicked State
     pressedState: {type: "selector"},
     hoverState: {type: "selector"},
+
+    clickedStateObject: {type: "string"}, // Mixin defining clicked State
+    pressedStateObject: {type: "string"},
+    hoverStateObject: {type: "string"},
   },
   dependencies: ["geometry", "material"],
   buttonStates: {
@@ -337,15 +346,21 @@ AFRAME.registerComponent('button', {
   },
   init: function () {
 
+    if (this.data.clickedStateObject) {
+      console.log("Clicked State Object: ", this.data.clickedStateObject);
+    }
+
     this.el.addEventListener("click", this.onClick.bind(this));
 
     this.buttonState = this.buttonStates.ORIGINAL;
     // Fake Mixin to save original appearance
-    this.originalAppearance = {};
-    this.originalAppearance.componentCache = {
+    this.originalAppearance = {
       material: this.el.getAttribute("material"),
       geometry: this.el.getAttribute("geometry"),
     };
+    this.pressedAppearance = this.data.pressedState? this.data.pressedState.componentCache: this.data.pressedStateObject;
+    this.clickedAppearance = this.data.clickedState? this.data.clickedState.componentCache: this.data.clickedStateObject;
+    this.hoverAppearance = this.data.hoverState? this.data.hoverState.componentCache: this.data.hoverStateObject;
   },
   update: function(oldData) {
   },
@@ -375,19 +390,19 @@ AFRAME.registerComponent('button', {
       this.applyMixin(this.originalAppearance);
     } 
     else if (newState == this.buttonStates.PRESSED) {
-      this.applyMixin(this.data.pressedState);
+      this.applyMixin(this.pressedAppearance);
     }
     else if (newState == this.buttonStates.CLICKED) {
-      this.applyMixin(this.data.clickedState);
+      this.applyMixin(this.clickedAppearance);
     }
     else if (newState == this.buttonStates.HOVER) {
-      this.applyMixin(this.data.hoverState);
+      this.applyMixin(this.hoverAppearance);
     }
   },
   applyMixin: function(mixin) {
     if (mixin) {
-      Object.keys(mixin.componentCache).forEach(function(key){
-        this.el.setAttribute(key, mixin.componentCache[key]);
+      Object.keys(mixin).forEach(function(key){
+        this.el.setAttribute(key, mixin[key]);
       }.bind(this));
     }
   },
