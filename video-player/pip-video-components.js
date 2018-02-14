@@ -133,28 +133,21 @@ AFRAME.registerComponent('floating-video-controls', {
     controller: {type: "selector"},
   },
   init: function () {
-    this.assets = document.createElement("a-assets");
-    this.testButton = document.createElement("a-mixin");
-    this.assets.appendChild(this.testButton);
-    this.maximizeButtonClicked = createMixin({
+
+    var buttonHeight = this.el.components.geometry.data.height / 4;
+    console.log(buttonHeight);
+
+    this.maximizeButton = document.createElement("a-entity");
+    this.maximizeButton.setAttribute("geometry", {primitive: "plane", width: buttonHeight, height: buttonHeight});
+    this.maximizeButton.setAttribute("material", {color: "white"});
+    this.maximizeButton.setAttribute("position", {x: 0.5, y: 0.5, z:0.1});
+    this.maximizeButton.setAttribute("button", {clickedStateObject: {
       material: {
-        color: "blue"
+        color: "red"
       }
-    }, "maximizeButtonClicked", this.assets);
+    }});
+    this.el.appendChild(this.maximizeButton);
 
-    this.maxButt = document.createElement("a-entity");
-    this.maxButt.setAttribute("button", {clickedStateObject: {color: "blue"}});
-    this.el.appendChild(this.maxButt);
-
-    this.el.sceneEl.appendChild(this.assets);
-    console.log(this.maximizeButtonClicked);
-
-    this.testButton.setAttribute("material", {color: "blue"});
-
-    // this.maximizeButton = document.createElement("a-entity");
-    // this.maximizeButton.setAttribute("button", {
-    //   clickedState:"#maximizeButtonClicked",
-    // });
   },
   update: function(oldData) {
 
