@@ -219,11 +219,11 @@ AFRAME.registerComponent('pip-video-controls', {
 
     this.slider = document.createElement("a-entity");
     this.slider.setAttribute("position", {x: 0, y: -0.5, z:-2});
-    this.slider.setAttribute("material", {color: "blue"});
+    this.slider.setAttribute("material", {color: "black"});
     this.slider.setAttribute("geometry", {primitive: "plane", width: 2, height: 0.2,});
     this.slider.setAttribute("slider", {
       buttonOriginalState: "#sliderButtonOriginal",
-      buttonClickedState: "#tomatoColor",
+      //buttonClickedState: "#tomatoColor",
     });
     
     // Dimmer
@@ -412,6 +412,12 @@ AFRAME.registerComponent('slider', {
     buttonClickedState: {type: "selector"}, // Mixin defining clicked State
     buttonPressedState: {type: "selector"},
     buttonHoverState: {type: "selector"},
+
+    buttonOriginalStateObject: {type: "string"},
+    buttonClickedStateObject: {type: "string"}, // Object defining clicked State
+    buttonPressedStateObject: {type: "string"},
+    buttonHoverStateObject: {type: "string"},
+
     minValue: {default: 0},
     maxValue: {default: 1},
     value: {default: 0.25},
@@ -422,11 +428,15 @@ AFRAME.registerComponent('slider', {
     this.sliderButton = document.createElement("a-entity");
     this.el.appendChild(this.sliderButton);
     //this.applyMixinTo(this.data.buttonOriginalState, this.sliderButton);
-    this.sliderButton.setAttribute("material", {color: "tomato"});
+    this.sliderButton.setAttribute("material", {color: "white"});
+    // this.sliderButton.setAttribute("geometry", {
+    //   primitive: "plane", 
+    //   width: this.data.height*buttonSize,
+    //   height: this.data.height*buttonSize,
+    // });
     this.sliderButton.setAttribute("geometry", {
-      primitive: "plane", 
-      width: this.data.height*buttonSize,
-      height: this.data.height*buttonSize,
+      primitive: "circle", 
+      radius: (this.data.height*buttonSize / 2),
     });
     // this.sliderButton.setAttribute("position", {x: 0, y: 0, z: 0.01});
     this.sliderButtonY = 0;
@@ -438,6 +448,11 @@ AFRAME.registerComponent('slider', {
       clickedState: this.data.buttonClickedState,
       pressedState: this.data.buttonPressedState,
       hoverState: this.data.buttonHoverState,
+
+      clickedStateObject: this.data.buttonClickedStateObject,
+      pressedStateObject: this.data.buttonPressedStateObject,
+      hoverStateObject: this.data.buttonHoverStateObject,
+
     });
     
     //this.moveSlider(0.25);
