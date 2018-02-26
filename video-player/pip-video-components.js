@@ -29,7 +29,6 @@ AFRAME.registerComponent('follow-rotation', {
   },
   init: function () {
     //this.el.setAttribute("position", this.data.entity.components.position.data);
-    this.followRotation();
   },
   play: function () {
   },
@@ -68,7 +67,73 @@ AFRAME.registerComponent('pip-video-interface', {
     this.controlsTimeoutMax = 10 * 1000;
     this.controlsTimeoutShort = 1 * 1000;
     this.controlsTimeout = this.controlsTimeoutMax;
-    window.addEventListener("click", this.bringUpControls.bind(this));
+    //window.addEventListener("click", this.bringUpControls.bind(this));
+    
+    var clickRecognizer = {
+      date: new Date(),
+      timeout: 1000,
+      lastCall: new Date().getTime(),
+      waiting: false,
+      timeoutActive: false,
+      states: {
+        nothing: 1,
+        inTimeout: 2,
+        canceledTimeout: 3
+      },
+      click: function () {
+        console.log(this);
+        if (!this.currentState) {
+          this.currentState = this.states.nothing;
+        }
+
+        var currentTime = this.date.getTime();
+
+        // if (currentTime > this.lastCall + this.timeout) {
+        //   this.waiting = false;
+        //   this.timeoutActive = false;
+        //   this.lastCall = currentTime;
+        // }
+
+        // if (this.waiting) {
+        //   clearInterval(this.singleClickInterval);
+        // } else if (!this.timeoutActive) {
+        //   this.singleClickInterval = setInterval(function() {console.log("Click Event fired once")}.bind(this), this.timeout);
+        //   this.waiting = true;
+        //   this.timeoutActive = true;
+        // }
+        if (currentTime > this.lastCall + this.timeout) {
+          this.lastCall = currentTime;
+
+          if (this.currentState === this.states.nothing || this.currentState === this.states.canceledTimeout) {
+            this.clickTimeout = setInterval(function() {console.log("Click Event fired once")}.bind(this), this.timeout);
+            this.currentState = this.states.newTimeout;
+          }
+        }
+        if (this.currentState === this.states.newTimeout) {
+          clearInterval(this.clickTimeout);
+          this.currentState = this.states.canceledTimeout;
+        }
+        if (this.currentState === this.states.canceledTimeout) {
+          this.currentState = this.states.nothing;
+        }
+      }
+    }
+
+    window.addEventListener("click", function(event) {
+      //console.log(event); 
+      clickRecognizer.click();
+      
+      if (event.detail.target) {
+          //console.log(event.detail.target);
+        if (event.detail.target.classList.contains("clickable")) {
+          //console.log("Is clickable");
+          
+        } else {
+          //this.toggleControls();
+          //clickRecognizer.click();
+        }
+      }
+    }.bind(this));
 
     this.data.video2d.setAttribute("floating-video-controls", {controller: "#" + this.el.getAttribute("id")});
 
@@ -81,6 +146,11 @@ AFRAME.registerComponent('pip-video-interface', {
   },
   registerUI: function(uiComponent) {
     this.uiComponent = uiComponent;
+    this.uiComponent.el.addEventListener("change", function(event) {
+      if (event.detail.userChangedValue) {
+        this.seekTo(event.detail.value);
+      }
+    }.bind(this));
   },
   play: function () {
   },
@@ -93,6 +163,17 @@ AFRAME.registerComponent('pip-video-interface', {
         this.hideControls();
       }
     }
+    if (this.videoDuration && this.uiComponent) {
+      this.uiComponent.setSlider(this.video360.currentTime / this.videoDuration);
+    }
+  },
+  toggleControls: function() {
+    if (this.controlsVisible) {
+      this.hideControls();
+    } else {
+      this.bringUpControls();
+    }
+    console.log("toggleControls called");
   },
   bringUpControls: function() {
     if (!this.controlsVisible) {
@@ -220,8 +301,6 @@ AFRAME.registerComponent('pip-video-controls', {
       this.el.setAttribute("visible", "false");
     }
     this.uiElements = [];
-    this.interfaceComponent = this.data.controller.components["pip-video-interface"];
-    console.log("interfaceComponent: ", this.interfaceComponent);
 
     var assets = document.createElement("a-assets");
     var tomatoColorMixin = document.createElement("a-mixin");
@@ -288,9 +367,11 @@ AFRAME.registerComponent('pip-video-controls', {
   play: function () {
     this.data.controller.components["pip-video-interface"].registerUI(this);
     this.slider.addEventListener("change", function (event) {
-      console.log("Change Event fired on slider, new value: ", event.detail.value, ", old Value: ", event.detail.value);
-      var interfaceComponent = this.data.controller.components["pip-video-interface"];
-      interfaceComponent.seekTo(event.detail.value);
+      var controller = this.data.controller.components["pip-video-interface"];
+      if (event.detail.userChangedValue) {
+        controller.seekTo(event.detail.value);
+      }
+      
 
     }.bind(this));
   },
@@ -311,6 +392,9 @@ AFRAME.registerComponent('pip-video-controls', {
   playPause: function() {
     var interfaceComponent = this.data.controller.components["pip-video-interface"];
     interfaceComponent.toggleVideos();
+  },
+  setSlider: function(value) {
+    this.slider.components.slider.setValue(value);
   },
   disableUI: function() {
     this.uiElements.forEach(function(element) {
@@ -378,6 +462,7 @@ AFRAME.registerComponent('button', {
     HOVER: "hover",
   },
   init: function () {
+    this.el.classList.add("clickable");
 
     if (this.data.clickedStateObject) {
       console.log("Clicked State Object: ", this.data.clickedStateObject);
@@ -462,21 +547,17 @@ AFRAME.registerComponent('slider', {
   },
   dependencies: ["geometry", "material"],
   init: function () {
+    this.el.classList.add("clickable");
     var buttonSize = 0.75;
     this.sliderButton = document.createElement("a-entity");
     this.el.appendChild(this.sliderButton);
-    //this.applyMixinTo(this.data.buttonOriginalState, this.sliderButton);
+    
     this.sliderButton.setAttribute("material", {color: "white"});
-    // this.sliderButton.setAttribute("geometry", {
-    //   primitive: "plane", 
-    //   width: this.data.height*buttonSize,
-    //   height: this.data.height*buttonSize,
-    // });
     this.sliderButton.setAttribute("geometry", {
       primitive: "circle", 
       radius: (this.data.height*buttonSize / 2),
     });
-    // this.sliderButton.setAttribute("position", {x: 0, y: 0, z: 0.01});
+
     this.sliderButtonY = 0;
     this.sliderButtonZ = 0.01;
     this.moveSlider(this.data.value);
@@ -497,6 +578,7 @@ AFRAME.registerComponent('slider', {
     this.el.addEventListener("click", this.onClick.bind(this));
   },
   update: function(oldData) {
+    
   },
   play: function () {
     //this.el.addEventListener("click", this.onClick.bind(this));
@@ -507,6 +589,9 @@ AFRAME.registerComponent('slider', {
   },
   tick: function (time, deltaTime) {
   },
+  setValue: function(value) {
+    this.moveSlider(value, false);
+  },
   onClick: function(event) {
     var localPos = new THREE.Vector3(
       event.detail.intersection.point.x,
@@ -514,12 +599,15 @@ AFRAME.registerComponent('slider', {
       event.detail.intersection.point.z);
 
     this.el.object3D.worldToLocal(localPos);
-    this.moveSliderTo(localPos.x);
+    this.moveSliderTo(localPos.x, true);
   },
-  moveSlider: function(value) {
+  moveSlider: function(value, userChangedValue) {
     if (value != this.value) {
-      var eventInfo = {value: value, oldValue: this.value};
-      console.log("Event Info: ", eventInfo);
+      var eventInfo = {
+        value: value, 
+        oldValue: this.value,
+        userChangedValue: userChangedValue == true ? true : false,
+      };
       this.el.emit("change", eventInfo);
 
       this.value = value;
@@ -530,9 +618,9 @@ AFRAME.registerComponent('slider', {
     }
     
   },
-  moveSliderTo: function(positionX) {
+  moveSliderTo: function(positionX, userChangedValue) {
     var value = this.convertRange(positionX, -this.data.width/2, this.data.width/2, this.data.minValue, this.data.maxValue);
-    this.moveSlider(value);
+    this.moveSlider(value, userChangedValue);
   },
   normalize: function(value, minValue, maxValue) {
     return value - minValue / (maxValue - minValue);
