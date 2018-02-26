@@ -71,6 +71,13 @@ AFRAME.registerComponent('pip-video-interface', {
     window.addEventListener("click", this.bringUpControls.bind(this));
 
     this.data.video2d.setAttribute("floating-video-controls", {controller: "#" + this.el.getAttribute("id")});
+
+    // Setup calculation of video duration
+    this.video = this.data.video2d.components.material.material.map.image;
+    this.video360 = this.data.video360.components.material.material.map.image;
+    this.updateVideoDuration();
+    this.video.addEventListener("durationchange", this.updateVideoDuration.bind(this));
+    this.video360.addEventListener("durationchange", this.updateVideoDuration.bind(this));
   },
   registerUI: function(uiComponent) {
     this.uiComponent = uiComponent;
@@ -102,6 +109,11 @@ AFRAME.registerComponent('pip-video-interface', {
     this.controlsVisible = false;
     this.pauseTimeout();
   },
+  updateVideoDuration: function() {
+    this.videoDuration = this.video.duration > this.video360.duration ? this.video360.duration : this.video.duration;
+    console.log("updateVideoDuration called");
+    console.log("Video Duration: ", this.videoDuration);
+  },
   toggleVideos: function() {
     var video = this.data.video2d.components.material.material.map.image;
     var video360 = this.data.video360.components.material.material.map.image;
@@ -114,6 +126,22 @@ AFRAME.registerComponent('pip-video-interface', {
       video360.pause();
       this.pauseTimeout();
     }
+  },
+  /**
+   * Scrubs to the specified position in the video
+   * @param  {number} position [The position in the video between 0 and 1]
+   */
+  seekTo: function (position) {
+    var time = position * this.videoDuration;
+    this.seekToSecond(time);
+  },
+  /**
+   * Scrubs to the specified time in seconds in the video
+   * @param  {Number} time [Time in seconds]
+   */
+  seekToSecond: function(time) {
+    this.video.currentTime = time;
+    this.video360.currentTime = time;
   },
   activateTimeout: function() {
     this.controlsTimeout = this.controlsTimeoutMax;
@@ -192,6 +220,8 @@ AFRAME.registerComponent('pip-video-controls', {
       this.el.setAttribute("visible", "false");
     }
     this.uiElements = [];
+    this.interfaceComponent = this.data.controller.components["pip-video-interface"];
+    console.log("interfaceComponent: ", this.interfaceComponent);
 
     var assets = document.createElement("a-assets");
     var tomatoColorMixin = document.createElement("a-mixin");
@@ -225,6 +255,8 @@ AFRAME.registerComponent('pip-video-controls', {
       buttonOriginalState: "#sliderButtonOriginal",
       //buttonClickedState: "#tomatoColor",
     });
+
+    
     
     // Dimmer
 
@@ -255,6 +287,12 @@ AFRAME.registerComponent('pip-video-controls', {
   },
   play: function () {
     this.data.controller.components["pip-video-interface"].registerUI(this);
+    this.slider.addEventListener("change", function (event) {
+      console.log("Change Event fired on slider, new value: ", event.detail.value, ", old Value: ", event.detail.value);
+      var interfaceComponent = this.data.controller.components["pip-video-interface"];
+      interfaceComponent.seekTo(event.detail.value);
+
+    }.bind(this));
   },
   pause: function () {         
   },
@@ -461,12 +499,10 @@ AFRAME.registerComponent('slider', {
   update: function(oldData) {
   },
   play: function () {
-    console.log("Play called!");
     //this.el.addEventListener("click", this.onClick.bind(this));
     // this.moveSlider(this.data.value);
   },
-  pause: function () {   
-    console.log("Pause called!"); 
+  pause: function () {    
     //this.el.removeEventListener("click", this.onClick.bind(this));     
   },
   tick: function (time, deltaTime) {
@@ -481,10 +517,18 @@ AFRAME.registerComponent('slider', {
     this.moveSliderTo(localPos.x);
   },
   moveSlider: function(value) {
-    this.value = value;
-    var normalizedValue = value - this.data.minValue / (this.data.maxValue - this.data.minValue);
-    var position = this.convertRange(value, this.data.minValue, this.data.maxValue, -this.data.width/2, this.data.width/2);
-    this.sliderButton.setAttribute("position", {x:position, y: this.sliderButtonY, z: this.sliderButtonZ});
+    if (value != this.value) {
+      var eventInfo = {value: value, oldValue: this.value};
+      console.log("Event Info: ", eventInfo);
+      this.el.emit("change", eventInfo);
+
+      this.value = value;
+
+      var normalizedValue = value - this.data.minValue / (this.data.maxValue - this.data.minValue);
+      var position = this.convertRange(value, this.data.minValue, this.data.maxValue, -this.data.width/2, this.data.width/2);
+      this.sliderButton.setAttribute("position", {x:position, y: this.sliderButtonY, z: this.sliderButtonZ});
+    }
+    
   },
   moveSliderTo: function(positionX) {
     var value = this.convertRange(positionX, -this.data.width/2, this.data.width/2, this.data.minValue, this.data.maxValue);
