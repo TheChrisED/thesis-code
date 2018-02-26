@@ -202,10 +202,12 @@ AFRAME.registerComponent('pip-video-controls', {
     
     // Play Pause Button
     this.playPauseButton = document.createElement("a-entity");
-    this.playPauseButton.setAttribute("material", {color: "green"});
-    this.playPauseButton.setAttribute("geometry", {primitive: "plane", width: 1, height: 1,});
+    this.playPauseButton.setAttribute("material", {color: "green", src: "#pause-icon", transparent: false});
+    //this.playPauseButton.setAttribute("geometry", {primitive: "plane", width: 1, height: 1,});
+    this.playPauseButton.setAttribute("geometry", {primitive: "circle", radius: 0.5});
     this.playPauseButton.setAttribute("position", {x: 0, y: 0.5, z:-2});
-    this.playPauseButton.setAttribute("button", {clickedState: "#tomatoColor"});
+    //this.playPauseButton.setAttribute("button", {clickedState: "#tomatoColor"});
+    this.playPauseButton.setAttribute("button", {clickedStateObject: {material: {src: "#play-icon"}}});
 
     // Slider
 
