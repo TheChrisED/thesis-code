@@ -116,6 +116,8 @@ AFRAME.registerComponent('pip-video-interface', {
       this.uiComponent.bringUpControls();
       // this.uiComponent.el.setAttribute("visible", "true");
       this.controlsVisible = true;
+      console.log("Parent element of 2d video: ", this.data.video2d.parentElement);
+      this.data.video2d.parentElement.setAttribute("follow-rotation", {x: false, y: false, z: false});
       this.activateTimeout();
     }
   },
@@ -123,6 +125,7 @@ AFRAME.registerComponent('pip-video-interface', {
     // this.uiComponent.el.setAttribute("visible", "false");
     this.uiComponent.hideControls();
     this.controlsVisible = false;
+    this.data.video2d.parentElement.setAttribute("follow-rotation", {x: false, y: true, z: false});
     this.pauseTimeout();
   },
   updateVideoDuration: function() {
