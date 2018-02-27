@@ -178,19 +178,23 @@ AFRAME.registerComponent('floating-video-controls', {
   },
   init: function () {
 
-    var buttonHeight = this.el.components.geometry.data.height / 4;
+    var videoHeight = this.el.components.geometry.data.height;
+    var videoWidth = this.el.components.geometry.data.width;
+    var buttonHeight = videoHeight / 4;
+    var border = 0.5 + buttonHeight/2;
     console.log(buttonHeight);
 
     this.maximizeButton = document.createElement("a-entity");
     this.maximizeButton.setAttribute("geometry", {primitive: "plane", width: buttonHeight, height: buttonHeight});
     this.maximizeButton.setAttribute("material", {color: "white"});
-    this.maximizeButton.setAttribute("position", {x: 0.5, y: 0.5, z:0.1});
+    this.maximizeButton.setAttribute("position", {x: -videoWidth/2 + border, y: videoHeight/2 - border, z:0.1});
     this.maximizeButton.setAttribute("button", {clickedStateObject: {
       material: {
         color: "red"
       }
     }});
     this.el.appendChild(this.maximizeButton);
+    this.maximizeButton.addEventListener("click", this.maximize.bind(this));
 
   },
   update: function(oldData) {
@@ -202,6 +206,9 @@ AFRAME.registerComponent('floating-video-controls', {
   pause: function () {         
   },
   tick: function (time, deltaTime) {
+  },
+  maximize: function () {
+    console.log("maximize");
   },
   bringUpControls: function() {
     this.el.setAttribute("visible", "true");
