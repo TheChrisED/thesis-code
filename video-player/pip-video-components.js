@@ -67,73 +67,73 @@ AFRAME.registerComponent('pip-video-interface', {
     this.controlsTimeoutMax = 10 * 1000;
     this.controlsTimeoutShort = 1 * 1000;
     this.controlsTimeout = this.controlsTimeoutMax;
-    //window.addEventListener("click", this.bringUpControls.bind(this));
+    window.addEventListener("click", this.bringUpControls.bind(this));
     
-    var clickRecognizer = {
-      date: new Date(),
-      timeout: 1000,
-      lastCall: new Date().getTime(),
-      waiting: false,
-      timeoutActive: false,
-      states: {
-        nothing: 1,
-        inTimeout: 2,
-        canceledTimeout: 3
-      },
-      click: function () {
-        console.log(this);
-        if (!this.currentState) {
-          this.currentState = this.states.nothing;
-        }
+    // var clickRecognizer = {
+    //   date: new Date(),
+    //   timeout: 1000,
+    //   lastCall: new Date().getTime(),
+    //   waiting: false,
+    //   timeoutActive: false,
+    //   states: {
+    //     nothing: 1,
+    //     inTimeout: 2,
+    //     canceledTimeout: 3
+    //   },
+    //   click: function () {
+    //     console.log(this);
+    //     if (!this.currentState) {
+    //       this.currentState = this.states.nothing;
+    //     }
 
-        var currentTime = this.date.getTime();
+    //     var currentTime = this.date.getTime();
 
-        // if (currentTime > this.lastCall + this.timeout) {
-        //   this.waiting = false;
-        //   this.timeoutActive = false;
-        //   this.lastCall = currentTime;
-        // }
+    //     // if (currentTime > this.lastCall + this.timeout) {
+    //     //   this.waiting = false;
+    //     //   this.timeoutActive = false;
+    //     //   this.lastCall = currentTime;
+    //     // }
 
-        // if (this.waiting) {
-        //   clearInterval(this.singleClickInterval);
-        // } else if (!this.timeoutActive) {
-        //   this.singleClickInterval = setInterval(function() {console.log("Click Event fired once")}.bind(this), this.timeout);
-        //   this.waiting = true;
-        //   this.timeoutActive = true;
-        // }
-        if (currentTime > this.lastCall + this.timeout) {
-          this.lastCall = currentTime;
+    //     // if (this.waiting) {
+    //     //   clearInterval(this.singleClickInterval);
+    //     // } else if (!this.timeoutActive) {
+    //     //   this.singleClickInterval = setInterval(function() {console.log("Click Event fired once")}.bind(this), this.timeout);
+    //     //   this.waiting = true;
+    //     //   this.timeoutActive = true;
+    //     // }
+    //     if (currentTime > this.lastCall + this.timeout) {
+    //       this.lastCall = currentTime;
 
-          if (this.currentState === this.states.nothing || this.currentState === this.states.canceledTimeout) {
-            this.clickTimeout = setInterval(function() {console.log("Click Event fired once")}.bind(this), this.timeout);
-            this.currentState = this.states.newTimeout;
-          }
-        }
-        if (this.currentState === this.states.newTimeout) {
-          clearInterval(this.clickTimeout);
-          this.currentState = this.states.canceledTimeout;
-        }
-        if (this.currentState === this.states.canceledTimeout) {
-          this.currentState = this.states.nothing;
-        }
-      }
-    }
+    //       if (this.currentState === this.states.nothing || this.currentState === this.states.canceledTimeout) {
+    //         this.clickTimeout = setInterval(function() {console.log("Click Event fired once")}.bind(this), this.timeout);
+    //         this.currentState = this.states.newTimeout;
+    //       }
+    //     }
+    //     if (this.currentState === this.states.newTimeout) {
+    //       clearInterval(this.clickTimeout);
+    //       this.currentState = this.states.canceledTimeout;
+    //     }
+    //     if (this.currentState === this.states.canceledTimeout) {
+    //       this.currentState = this.states.nothing;
+    //     }
+    //   }
+    // }
 
-    window.addEventListener("click", function(event) {
-      //console.log(event); 
-      clickRecognizer.click();
+    // window.addEventListener("click", function(event) {
+    //   //console.log(event); 
+    //   clickRecognizer.click();
       
-      if (event.detail.target) {
-          //console.log(event.detail.target);
-        if (event.detail.target.classList.contains("clickable")) {
-          //console.log("Is clickable");
+    //   if (event.detail.target) {
+    //       //console.log(event.detail.target);
+    //     if (event.detail.target.classList.contains("clickable")) {
+    //       //console.log("Is clickable");
           
-        } else {
-          //this.toggleControls();
-          //clickRecognizer.click();
-        }
-      }
-    }.bind(this));
+    //     } else {
+    //       //this.toggleControls();
+    //       //clickRecognizer.click();
+    //     }
+    //   }
+    // }.bind(this));
 
     this.data.video2d.setAttribute("floating-video-controls", {controller: "#" + this.el.getAttribute("id")});
 
