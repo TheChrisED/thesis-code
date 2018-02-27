@@ -274,13 +274,11 @@ AFRAME.registerComponent('pip-video-controls', {
     
     // Dimmer
 
-    var dimmerSize = 10;
+    var dimmerSize = 100;
     this.dimmer = document.createElement("a-entity");
     this.dimmer.setAttribute("geometry", {
-      primitive: "box",
-      width: dimmerSize,
-      height: dimmerSize,
-      depth: dimmerSize,
+      primitive: "sphere",
+      radius: dimmerSize,
     });
     this.dimmer.setAttribute("material", {
       shader: "flat",
