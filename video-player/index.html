@@ -108,6 +108,8 @@
       });
 
       cam.addEventListener("gamepadbuttonup", function (e) {
+        console.log(e);
+        console.log(e.detail.index);
         console.log('Button "%d" has been released.', e.index);
         var upEvent = new MouseEvent("mouseup", {
           bubbles: true,
@@ -125,8 +127,6 @@
         });
         cam.sceneEl.canvas.dispatchEvent(clickEvent);
       });
-      window.addEventListener("mousedown", function(e){console.log("Click Event: ", e)});
-      window.addEventListener("mouseup", function(e){console.log("Mouse up Event: ", e)});
     </script>
   </body>
 </html>

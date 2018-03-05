@@ -20,6 +20,12 @@ var applyToMixin = function(mixinObject, element, asString) {
     }
 };
 
+var convertRange = function(oldValue, oldMin, oldMax, newMin, newMax) {
+    var oldRange = (oldMax - oldMin); 
+    var newRange = (newMax - newMin);
+    return (((oldValue - oldMin) * newRange) / oldRange) + newMin;
+  };
+
 AFRAME.registerComponent('follow-position', {
   schema: {
     entity: {type: "selector"},
@@ -260,7 +266,8 @@ AFRAME.registerComponent('floating-video-controls', {
     top: {xOffset:30, yOffset: 0, zOffset: 0},
     bottom: {xOffset:-50, yOffset: 0, zOffset: 0},
     topLeft: {xOffset:10, yOffset: 20, zOffset: 0},
-    topRight:{xOffset:30, yOffset: 20, zOffset: 0},
+    topRight:{xOffset:30, yOffset: -20, zOffset: 0},
+    right: {xOffset:0, yOffset: -20, zOffset: 0},
   },
   dependencies: ["position"],
   init: function () {
@@ -269,24 +276,65 @@ AFRAME.registerComponent('floating-video-controls', {
     this.maximizeDepth = position.z / 1.5;
     this.minimizeDepth = position.z;
 
-    var videoHeight = this.el.components.geometry.data.height;
-    var videoWidth = this.el.components.geometry.data.width;
-    var buttonHeight = videoHeight / 4;
-    var border = 0.5 + buttonHeight/2;
-    console.log(buttonHeight);
+    this.videoHeight = this.el.components.geometry.data.height;
+    this.videoWidth = this.el.components.geometry.data.width;
+    this.buttonHeight = this.videoHeight / 4;
+    this.border = 0.5 + this.buttonHeight/2;
+    this.smallBorder = this.border/this.videoHeight;
+    console.log(this.buttonHeight);
+
+    this.uiEntity = document.createElement("a-entity");
+    this.el.appendChild(this.uiEntity);
 
     this.maximizeButton = document.createElement("a-entity");
-    this.maximizeButton.setAttribute("geometry", {primitive: "plane", width: buttonHeight, height: buttonHeight});
+    this.maximizeButton.setAttribute("geometry", {primitive: "plane", width: this.buttonHeight, height: this.buttonHeight});
     this.maximizeButton.setAttribute("material", {color: "white"});
-    this.maximizeButton.setAttribute("position", {x: -videoWidth/2 + border, y: videoHeight/2 - border, z:0.1});
+    this.maximizeButton.setAttribute("position", {x: -this.videoWidth/2 + this.border, y: this.videoHeight/2 - this.border, z:0.1});
     this.maximizeButton.setAttribute("button", {clickedStateObject: {
       material: {
         color: "red"
       }
     }});
-    this.el.appendChild(this.maximizeButton);
+    this.uiEntity.appendChild(this.maximizeButton);
     this.maximizeButton.addEventListener("click", this.maximizeBtnPressed.bind(this));
 
+    this.moveRightButton = this.createButton(1, 0);
+    this.uiEntity.appendChild(this.moveRightButton);
+    this.moveRightButton.addEventListener("click", this.moveRightBtnPressed.bind(this));
+
+    this.moveUpButton = this.setupButton(0, 1, this.moveUpBtnPressed.bind(this));
+
+  },
+  setupButton: function(posX, posY, callback, src, srcClicked) {
+    var button = this.createButton(posX, posY, src, srcClicked);
+    this.uiEntity.appendChild(button);
+    button.addEventListener("click", callback);
+    return button;
+  },
+  /**
+   * Creates a button with the specified textures or default colors if not provided
+   * @param  {[type]} xPos       [Position between -1 (left) and 1 (right)]
+   * @param  {[type]} yPos       [Position between -1 and 1]
+   * @param  {[type]} src        [Texture for the button]
+   * @param  {[type]} srcClicked [Txture for button when in clicked state]
+   * @return {[type]}            [HTML element configured with button properties]
+   */
+  createButton: function(xPos, yPos, src, srcClicked) {
+    var button = document.createElement("a-entity");
+    button.setAttribute("geometry", {primitive: "plane", width: this.buttonHeight, height: this.buttonHeight});
+    button.setAttribute("material", {color: "white"});
+    
+    var btnXPos = convertRange(xPos, -1, 1, -this.videoWidth / 2 + this.border, this.videoWidth / 2 - this.border);
+    var btnYPos = convertRange(yPos, -1, 1, -this.videoHeight / 2 + this.border, this.videoHeight / 2 - this.border);
+
+    console.log("btnXPos: ", btnXPos);
+    button.setAttribute("position", {x: btnXPos, y: btnYPos, z:0.1});
+    button.setAttribute("button", {clickedStateObject: {
+      material: {
+        color: "red"
+      }
+    }});
+    return button;
   },
   update: function(oldData) {
 
@@ -298,6 +346,24 @@ AFRAME.registerComponent('floating-video-controls', {
   },
   tick: function (time, deltaTime) {
   },
+  moveRightBtnPressed: function () {
+    console.log("move right");
+    var eventInfo = {
+      target: this.moveRightButton,
+      targetName: "moveRightButton"
+    };
+    this.el.emit("click", eventInfo);
+    this.moveVideo(this.videoPositions.right);
+  },
+  moveUpBtnPressed: function() {
+    console.log("move up");
+    var eventInfo = {
+      target: this.moveUpButton,
+      targetName: "moveUpButton"
+    };
+    this.el.emit("click", eventInfo);
+    this.moveVideo(this.videoPositions.top);
+  },
   maximizeBtnPressed: function () {
     console.log("maximize");
     var eventInfo = {
@@ -307,12 +373,7 @@ AFRAME.registerComponent('floating-video-controls', {
     this.el.emit("click", eventInfo);
   },
   maximizeVideo: function(position) {
-    var currentRotation = this.el.parentElement.getAttribute("rotation");
-    var currentPosition = this.el.getAttribute("position");
-    var rotation = {x: +25, y: currentRotation.y, z: currentRotation.z};
-    console.log("rotation: ", currentRotation);
-    var followRotationOffset = position? position: this.videoPositions.top;
-    this.el.parentElement.setAttribute("follow-rotation", followRotationOffset);
+    if (position) this.moveVideo(position);
     this.el.setAttribute("position", {z: this.maximizeDepth});
     this.maximized = true;
   },
@@ -320,6 +381,9 @@ AFRAME.registerComponent('floating-video-controls', {
     this.el.setAttribute("position", {z: this.minimizeDepth});
     this.el.parentElement.setAttribute("follow-rotation", {xOffset: -50, yOffset: 0});
     this.maximized = false;
+  },
+  moveVideo: function(position) {
+    this.el.parentElement.setAttribute("follow-rotation", position);
   },
   bringUpControls: function() {
     this.el.setAttribute("visible", "true");
