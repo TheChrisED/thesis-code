@@ -62,6 +62,13 @@ AFRAME.registerComponent('pip-video-interface', {
     this.data.video2d.setAttribute("width", width);
     this.data.video2d.setAttribute("height", height);
 
+    // Sets up a new child element with video controls component
+    this.videoControls = document.createElement("a-entity");
+    this.videoControls.setAttribute("id", "video-ui-controls");
+    this.videoControls.setAttribute("visible", "false");
+    this.videoControls.setAttribute("pip-video-controls", {controller: "#" + this.el.getAttribute("id")});
+    this.el.appendChild(this.videoControls);
+
     this.controlsVisible = false;
     this.timeoutActive = false;
     this.controlsTimeoutMax = 10 * 1000;
@@ -71,6 +78,7 @@ AFRAME.registerComponent('pip-video-interface', {
     
 
     this.data.video2d.setAttribute("floating-video-controls", {controller: "#" + this.el.getAttribute("id")});
+    this.data.video2d.addEventListener("click", this.clickListener.bind(this));
 
     // Setup calculation of video duration
     this.video = this.data.video2d.components.material.material.map.image;
@@ -101,6 +109,20 @@ AFRAME.registerComponent('pip-video-interface', {
     if (this.videoDuration && this.uiComponent) {
       this.uiComponent.setSlider(this.video360.currentTime / this.videoDuration);
     }
+  },
+  clickListener: function(event) {
+    if (event.detail.targetName === "maximizeButton") {
+      this.toggleVideoSize();
+    }
+  },
+  toggleVideoSize: function() {
+    console.log("Toggle Video Size!");
+  },
+  maximizeVideo: function() {
+
+  },
+  minimizeVideo: function() {
+
   },
   toggleControls: function() {
     if (this.controlsVisible) {
@@ -212,6 +234,11 @@ AFRAME.registerComponent('floating-video-controls', {
   },
   maximize: function () {
     console.log("maximize");
+    var eventInfo = {
+      target: this.maximizeButton,
+      targetName: "maximizeButton"
+    };
+    this.el.emit("click", eventInfo);
   },
   bringUpControls: function() {
     this.el.setAttribute("visible", "true");
