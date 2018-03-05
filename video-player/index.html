@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
     
   </head>
   <body>
@@ -37,7 +38,7 @@
       </a-camera>
 
       <!-- Picture in Picture Videoplayer 360 Video + 2D Video-->
-      <a-entity id="pip-video-interface" pip-video-interface="video360: #video360-player; video2d: #video2d-player;">
+      <a-entity id="pip-video-interface" pip-video-interface="video360: #video360-player; video2d: #video2d-player;" follow-position="entity: #main-camera">
         <!-- The original example also has this 180 degree rotation, to appear to be going forward. -->
         <a-videosphere id="video360-player" rotation="0 180 0" src="#video" 
                        play-on-window-click

@@ -20,6 +20,38 @@ var applyToMixin = function(mixinObject, element, asString) {
     }
 };
 
+AFRAME.registerComponent('follow-position', {
+  schema: {
+    entity: {type: "selector"},
+    x: {default: true},
+    y: {default: true},
+    z: {default: true},
+    xOffset: {default: 0},
+    yOffset: {default: 0},
+    zOffset: {default: 0},
+  },
+  init: function () {
+    //this.el.setAttribute("position", this.data.entity.components.position.data);
+  },
+  update: function(oldData) {
+  },
+  play: function () {
+  },
+  pause: function () {         
+  },
+  tick: function (time, deltaTime) {
+    this.followPosition();
+  },
+  followPosition: function() {
+    var newPosition = {
+      x: this.data.x? this.data.entity.components.position.data.x + this.data.xOffset: this.el.components.position.data.x,
+      y: this.data.y? this.data.entity.components.position.data.y + this.data.yOffset: this.el.components.position.data.y,
+      z: this.data.z? this.data.entity.components.position.data.z + this.data.zOffset:this.el.components.position.data.z,
+    };
+    this.el.setAttribute("position", newPosition);
+  }
+});
+
 AFRAME.registerComponent('follow-rotation', {
   schema: {
     entity: {type: "selector"},
@@ -110,6 +142,7 @@ AFRAME.registerComponent('pip-video-interface', {
     }.bind(this));
   },
   play: function () {
+    this.floatingVideo = this.data.video2d.components["floating-video-controls"];
   },
   pause: function () {         
   },
@@ -131,7 +164,12 @@ AFRAME.registerComponent('pip-video-interface', {
   },
   toggleVideoSize: function() {
     console.log("Toggle Video Size!");
-    this.maximizeVideo();
+    if (this.floatingVideo.maximized) {
+      this.minimizeVideo();
+    } else {
+      this.maximizeVideo();
+    }
+    
   },
   maximizeVideo: function() {
     var floatingVideo = this.data.video2d.components["floating-video-controls"];
@@ -139,7 +177,7 @@ AFRAME.registerComponent('pip-video-interface', {
     floatingVideo.maximizeVideo();
   },
   minimizeVideo: function() {
-
+    this.floatingVideo.minimizeVideo();
   },
   toggleControls: function() {
     if (this.controlsVisible) {
@@ -218,8 +256,15 @@ AFRAME.registerComponent('floating-video-controls', {
   schema: {
     controller: {type: "selector"},
   },
+  videoPositions: {
+    top: {xOffset:50, yOffset: 0, zOffset: 0},
+    bottom: {xOffset:-50, yOffset: 0, zOffset: 0},
+    topLeft: {xOffset:30, yOffset: 20, zOffset: 0},
+    topRight:{xOffset:30, yOffset: 20, zOffset: 0},
+  },
   dependencies: ["position"],
   init: function () {
+    this.maximized = false;
     var position = this.el.getAttribute("position");
     this.maximizeDepth = position.z / 2;
     this.minimizeDepth = position.z;
@@ -266,8 +311,15 @@ AFRAME.registerComponent('floating-video-controls', {
     var currentPosition = this.el.getAttribute("position");
     var rotation = {x: +25, y: currentRotation.y, z: currentRotation.z};
     console.log("rotation: ", currentRotation);
-    this.el.parentElement.setAttribute("follow-rotation", {xOffset: 0, yOffset: 10});
+    var followRotationOffset = position? position: this.videoPositions.topRight;
+    this.el.parentElement.setAttribute("follow-rotation", followRotationOffset);
     this.el.setAttribute("position", {z: this.maximizeDepth});
+    this.maximized = true;
+  },
+  minimizeVideo: function () {
+    this.el.setAttribute("position", {z: this.minimizeDepth});
+    this.el.parentElement.setAttribute("follow-rotation", {xOffset: -50, yOffset: 0});
+    this.maximized = false;
   },
   bringUpControls: function() {
     this.el.setAttribute("visible", "true");
