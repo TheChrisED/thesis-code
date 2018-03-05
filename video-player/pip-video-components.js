@@ -26,9 +26,23 @@ AFRAME.registerComponent('follow-rotation', {
     x: {default: false},
     y: {default: true},
     z: {default: false},
+    xOffset: {default: 0},
+    yOffset: {default: 0},
+    zOffset: {default: 0},
   },
   init: function () {
     //this.el.setAttribute("position", this.data.entity.components.position.data);
+  },
+  update: function(oldData) {
+    var rotation = this.el.getAttribute("rotation");
+    if (oldData.xOffset) rotation.x += oldData.xOffset != this.data.xOffset? this.data.xOffset - oldData.xOffset: 0;
+    else rotation.x += this.data.xOffset;
+    if (oldData.yOffset) rotation.y += oldData.yOffset != this.data.yOffset? this.data.yOffset - oldData.yOffset: 0;
+    else rotation.y += this.data.yOffset;
+    if (oldData.zOffset) rotation.z += oldData.zOffset != this.data.zOffset? this.data.zOffset - oldData.zOffset: 0;
+    else rotation.z += this.data.zOffset;
+    
+    this.el.setAttribute("rotation", rotation);
   },
   play: function () {
   },
@@ -39,9 +53,9 @@ AFRAME.registerComponent('follow-rotation', {
   },
   followRotation: function() {
     var newRotation = {
-      x: this.data.x? this.data.entity.components.rotation.data.x: this.el.components.rotation.data.x,
-      y: this.data.y? this.data.entity.components.rotation.data.y: this.el.components.rotation.data.y,
-      z: this.data.z? this.data.entity.components.rotation.data.z:this.el.components.rotation.data.z,
+      x: this.data.x? this.data.entity.components.rotation.data.x + this.data.xOffset: this.el.components.rotation.data.x,
+      y: this.data.y? this.data.entity.components.rotation.data.y + this.data.yOffset: this.el.components.rotation.data.y,
+      z: this.data.z? this.data.entity.components.rotation.data.z + this.data.zOffset:this.el.components.rotation.data.z,
     };
     this.el.setAttribute("rotation", newRotation);
   }
@@ -117,9 +131,12 @@ AFRAME.registerComponent('pip-video-interface', {
   },
   toggleVideoSize: function() {
     console.log("Toggle Video Size!");
+    this.maximizeVideo();
   },
   maximizeVideo: function() {
-
+    var floatingVideo = this.data.video2d.components["floating-video-controls"];
+    console.log("floatingVideo: ", floatingVideo);
+    floatingVideo.maximizeVideo();
   },
   minimizeVideo: function() {
 
@@ -219,7 +236,7 @@ AFRAME.registerComponent('floating-video-controls', {
       }
     }});
     this.el.appendChild(this.maximizeButton);
-    this.maximizeButton.addEventListener("click", this.maximize.bind(this));
+    this.maximizeButton.addEventListener("click", this.maximizeBtnPressed.bind(this));
 
   },
   update: function(oldData) {
@@ -232,13 +249,21 @@ AFRAME.registerComponent('floating-video-controls', {
   },
   tick: function (time, deltaTime) {
   },
-  maximize: function () {
+  maximizeBtnPressed: function () {
     console.log("maximize");
     var eventInfo = {
       target: this.maximizeButton,
       targetName: "maximizeButton"
     };
     this.el.emit("click", eventInfo);
+  },
+  maximizeVideo: function(position) {
+    var currentRotation = this.el.parentElement.getAttribute("rotation");
+    var currentPosition = this.el.getAttribute("position");
+    var rotation = {x: +25, y: currentRotation.y, z: currentRotation.z};
+    console.log("rotation: ", currentRotation);
+    this.el.parentElement.setAttribute("follow-rotation", {xOffset: 0, yOffset: 10});
+    //this.el.parentElement.setAttribute("rotation", rotation);
   },
   bringUpControls: function() {
     this.el.setAttribute("visible", "true");
