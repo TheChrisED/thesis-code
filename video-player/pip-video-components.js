@@ -218,7 +218,11 @@ AFRAME.registerComponent('floating-video-controls', {
   schema: {
     controller: {type: "selector"},
   },
+  dependencies: ["position"],
   init: function () {
+    var position = this.el.getAttribute("position");
+    this.maximizeDepth = position.z / 2;
+    this.minimizeDepth = position.z;
 
     var videoHeight = this.el.components.geometry.data.height;
     var videoWidth = this.el.components.geometry.data.width;
@@ -263,7 +267,7 @@ AFRAME.registerComponent('floating-video-controls', {
     var rotation = {x: +25, y: currentRotation.y, z: currentRotation.z};
     console.log("rotation: ", currentRotation);
     this.el.parentElement.setAttribute("follow-rotation", {xOffset: 0, yOffset: 10});
-    //this.el.parentElement.setAttribute("rotation", rotation);
+    this.el.setAttribute("position", {z: this.maximizeDepth});
   },
   bringUpControls: function() {
     this.el.setAttribute("visible", "true");
