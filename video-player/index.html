@@ -15,6 +15,7 @@
     <script src="hide-once-playing.js"></script>
 
     <script src="pip-video-components.js"></script>
+    <script src="aframe-gamepad-controls.js"></script>
     <!--<script src="aframe-ui-widgets.js"></script>-->
 
     
@@ -22,7 +23,7 @@
     <!-- Specify our scene. -->
     <a-scene>
       <!-- Define camera with zero user height, movement disabled and arrow key rotation added. -->
-      <a-camera position="0 0 0" id="main-camera" user-height="1.6" wasd-controls-enabled="false" arrow-key-rotation>
+      <a-camera position="0 0 0" id="main-camera" user-height="1.6" wasd-controls-enabled="false" arrow-key-rotation gamepad-controls>
         <!-- Text element for display messaging.  Hide once video is playing. -->
         <a-entity id="msg" position="0 -0.3 -1.5" text="align:center; 
                 width:3;
@@ -94,6 +95,18 @@
       var cam = document.getElementById("main-camera");
       var pivot = document.getElementById("pivot");
       var video2d = document.getElementById("video2D");
+
+      cam.addEventListener('gamepadbuttondown', function (e) {
+        console.log('Button "%d" has been pressed.', e.index);
+        var clickEvent = new MouseEvent("click", {
+          bubbles: true,
+          cancelable: true,
+          x: 0,
+          y: 0,
+        });
+        cam.sceneEl.canvas.dispatchEvent(clickEvent);
+      });
+      window.addEventListener("click", function(e){console.log("Click Event: ", e)});
     </script>
   </body>
 </html>
