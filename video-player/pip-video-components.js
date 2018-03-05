@@ -257,16 +257,16 @@ AFRAME.registerComponent('floating-video-controls', {
     controller: {type: "selector"},
   },
   videoPositions: {
-    top: {xOffset:50, yOffset: 0, zOffset: 0},
+    top: {xOffset:30, yOffset: 0, zOffset: 0},
     bottom: {xOffset:-50, yOffset: 0, zOffset: 0},
-    topLeft: {xOffset:30, yOffset: 20, zOffset: 0},
+    topLeft: {xOffset:10, yOffset: 20, zOffset: 0},
     topRight:{xOffset:30, yOffset: 20, zOffset: 0},
   },
   dependencies: ["position"],
   init: function () {
     this.maximized = false;
     var position = this.el.getAttribute("position");
-    this.maximizeDepth = position.z / 2;
+    this.maximizeDepth = position.z / 1.5;
     this.minimizeDepth = position.z;
 
     var videoHeight = this.el.components.geometry.data.height;
@@ -311,7 +311,7 @@ AFRAME.registerComponent('floating-video-controls', {
     var currentPosition = this.el.getAttribute("position");
     var rotation = {x: +25, y: currentRotation.y, z: currentRotation.z};
     console.log("rotation: ", currentRotation);
-    var followRotationOffset = position? position: this.videoPositions.topRight;
+    var followRotationOffset = position? position: this.videoPositions.top;
     this.el.parentElement.setAttribute("follow-rotation", followRotationOffset);
     this.el.setAttribute("position", {z: this.maximizeDepth});
     this.maximized = true;

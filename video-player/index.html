@@ -22,7 +22,7 @@
     <!-- Specify our scene. -->
     <a-scene>
       <!-- Define camera with zero user height, movement disabled and arrow key rotation added. -->
-      <a-camera position="0 0 0" id="main-camera" user-height="0" wasd-controls-enabled="false" arrow-key-rotation>
+      <a-camera position="0 0 0" id="main-camera" user-height="1.6" wasd-controls-enabled="false" arrow-key-rotation>
         <!-- Text element for display messaging.  Hide once video is playing. -->
         <a-entity id="msg" position="0 -0.3 -1.5" text="align:center; 
                 width:3;
@@ -32,7 +32,7 @@
                 hide-once-playing="#video">
         </a-entity>
 
-        <a-cursor material="color: green">
+        <a-cursor material="color: green" position="0 0 -3">
           
         </a-cursor>
       </a-camera>
