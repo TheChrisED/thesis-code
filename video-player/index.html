@@ -98,6 +98,25 @@
 
       cam.addEventListener('gamepadbuttondown', function (e) {
         console.log('Button "%d" has been pressed.', e.index);
+        var clickEvent = new MouseEvent("mousedown", {
+          bubbles: true,
+          cancelable: true,
+          x: 0,
+          y: 0,
+        });
+        cam.sceneEl.canvas.dispatchEvent(clickEvent);
+      });
+
+      cam.addEventListener("gamepadbuttonup", function (e) {
+        console.log('Button "%d" has been released.', e.index);
+        var upEvent = new MouseEvent("mouseup", {
+          bubbles: true,
+          cancelable: true,
+          x: 0,
+          y: 0,
+        });
+        cam.sceneEl.canvas.dispatchEvent(upEvent);
+
         var clickEvent = new MouseEvent("click", {
           bubbles: true,
           cancelable: true,
@@ -106,7 +125,8 @@
         });
         cam.sceneEl.canvas.dispatchEvent(clickEvent);
       });
-      window.addEventListener("click", function(e){console.log("Click Event: ", e)});
+      window.addEventListener("mousedown", function(e){console.log("Click Event: ", e)});
+      window.addEventListener("mouseup", function(e){console.log("Mouse up Event: ", e)});
     </script>
   </body>
 </html>
