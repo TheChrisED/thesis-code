@@ -118,6 +118,7 @@ AFRAME.registerComponent('pip-video-interface', {
     this.videoControls = document.createElement("a-entity");
     this.videoControls.setAttribute("id", "video-ui-controls");
     this.videoControls.setAttribute("visible", "false");
+    this.videoControls.setAttribute("position", {z: -1});
     this.videoControls.setAttribute("pip-video-controls", {controller: "#" + this.el.getAttribute("id")});
     this.el.appendChild(this.videoControls);
 
@@ -276,6 +277,7 @@ AFRAME.registerComponent('floating-video-controls', {
   init: function () {
     this.maximized = false;
     this.forceFixPosition = false;
+    this.freeTransformActive = false;
     var position = this.el.getAttribute("position");
     this.maximizeDepth = position.z / 1.5;
     this.minimizeDepth = position.z;
@@ -295,7 +297,9 @@ AFRAME.registerComponent('floating-video-controls', {
     this.maximizeButton = this.setupButton(0, 0, this.maximizeBtnPressed.bind(this));
     this.moveRightButton = this.setupButton(1, 0, this.moveRightBtnPressed.bind(this), null, {material: {color: "white"}});
     this.moveUpButton = this.setupButton(0, 1, this.moveUpBtnPressed.bind(this), null, {material: {color: "white"}});
+    this.moveDownButton = this.setupButton(0, -1, this.moveDownBtnPressed.bind(this), null, {material: {color: "white"}});
     this.fixPositionButton = this.setupButton(-1, -1, this.fixPositionBtnPressed.bind(this));
+    this.freeTransformButton = this.setupButton(-0.5, -1, this.freeTransformBtnPressed.bind(this));
 
   },
   setupButton: function(posX, posY, callback, initState, clickedState) {
@@ -375,6 +379,15 @@ AFRAME.registerComponent('floating-video-controls', {
     this.el.emit("click", eventInfo);
     this.moveVideo(this.videoPositions.top);
   },
+  moveDownBtnPressed: function() {
+    var eventInfo = {
+      isUIElement: true,
+      target: this.moveDownButton,
+      targetName: "moveDownButton"
+    };
+    this.el.emit("click", eventInfo);
+    this.moveVideo(this.videoPositions.bottom);
+  },
   maximizeBtnPressed: function () {
     var eventInfo = {
       isUIElement: true,
@@ -392,12 +405,24 @@ AFRAME.registerComponent('floating-video-controls', {
     this.el.emit("click", eventInfo);
     this.forceFixPosition = !this.forceFixPosition;
   },
+  freeTransformBtnPressed: function() {
+    var eventInfo = {
+      isUIElement: true,
+      target: this.freeTransformButton,
+      targetName: "freeTransformButton"
+    };
+    this.el.emit("click", eventInfo);
+    this.freeTransformActive = !this.freeTransformActive;
+  },
   fixPosition: function() {
     this.el.parentElement.setAttribute("follow-rotation", {x: false, y: false, z: false});
   },
   unfixPosition: function() {
     if (!this.forceFixPosition) {
       this.el.parentElement.setAttribute("follow-rotation", {x: false, y: true, z: false});
+    }
+    if (this.freeTransformActive) {
+      this.el.parentElement.setAttribute("follow-rotation", {x: true, y: true, z: false, xOffset: 0, yOffset: 0, zOffset: 0});
     }
   },
   maximizeVideo: function(position) {
@@ -450,7 +475,7 @@ AFRAME.registerComponent('pip-video-controls', {
     this.playPauseButton.setAttribute("material", {color: "green", src: "#pause-icon", transparent: false});
     //this.playPauseButton.setAttribute("geometry", {primitive: "plane", width: 1, height: 1,});
     this.playPauseButton.setAttribute("geometry", {primitive: "circle", radius: 0.5});
-    this.playPauseButton.setAttribute("position", {x: 0, y: 0.5, z:-2});
+    this.playPauseButton.setAttribute("position", {x: 0, y: 0.25, z:-2});
     //this.playPauseButton.setAttribute("button", {clickedState: "#tomatoColor"});
     this.playPauseButton.setAttribute("button", {clickedStateObject: {material: {src: "#play-icon"}}});
 
