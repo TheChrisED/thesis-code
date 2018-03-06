@@ -197,18 +197,18 @@ AFRAME.registerComponent('pip-video-interface', {
     if (!this.controlsVisible) {
       if(!this.uiComponent) {return;}
       this.uiComponent.bringUpControls();
-      // this.uiComponent.el.setAttribute("visible", "true");
+      this.floatingVideo.bringUpControls();
       this.controlsVisible = true;
       console.log("Parent element of 2d video: ", this.data.video2d.parentElement);
-      this.data.video2d.parentElement.setAttribute("follow-rotation", {x: false, y: false, z: false});
       this.activateTimeout();
     }
   },
   hideControls: function() {
     // this.uiComponent.el.setAttribute("visible", "false");
     this.uiComponent.hideControls();
+    this.floatingVideo.hideControls();
     this.controlsVisible = false;
-    this.data.video2d.parentElement.setAttribute("follow-rotation", {x: false, y: true, z: false});
+    
     this.pauseTimeout();
   },
   updateVideoDuration: function() {
@@ -272,6 +272,7 @@ AFRAME.registerComponent('floating-video-controls', {
   dependencies: ["position"],
   init: function () {
     this.maximized = false;
+    this.forceFixPosition = false;
     var position = this.el.getAttribute("position");
     this.maximizeDepth = position.z / 1.5;
     this.minimizeDepth = position.z;
@@ -285,28 +286,17 @@ AFRAME.registerComponent('floating-video-controls', {
 
     this.uiEntity = document.createElement("a-entity");
     this.el.appendChild(this.uiEntity);
+    this.hideControls();
 
-    this.maximizeButton = document.createElement("a-entity");
-    this.maximizeButton.setAttribute("geometry", {primitive: "plane", width: this.buttonHeight, height: this.buttonHeight});
-    this.maximizeButton.setAttribute("material", {color: "white"});
-    this.maximizeButton.setAttribute("position", {x: -this.videoWidth/2 + this.border, y: this.videoHeight/2 - this.border, z:0.1});
-    this.maximizeButton.setAttribute("button", {clickedStateObject: {
-      material: {
-        color: "red"
-      }
-    }});
-    this.uiEntity.appendChild(this.maximizeButton);
-    this.maximizeButton.addEventListener("click", this.maximizeBtnPressed.bind(this));
 
-    this.moveRightButton = this.createButton(1, 0);
-    this.uiEntity.appendChild(this.moveRightButton);
-    this.moveRightButton.addEventListener("click", this.moveRightBtnPressed.bind(this));
-
-    this.moveUpButton = this.setupButton(0, 1, this.moveUpBtnPressed.bind(this));
+    this.maximizeButton = this.setupButton(0, 0, this.maximizeBtnPressed.bind(this));
+    this.moveRightButton = this.setupButton(1, 0, this.moveRightBtnPressed.bind(this), null, {material: {color: "white"}});
+    this.moveUpButton = this.setupButton(0, 1, this.moveUpBtnPressed.bind(this), null, {material: {color: "white"}});
+    this.fixPositionButton = this.setupButton(-1, -1, this.fixPositionBtnPressed.bind(this));
 
   },
-  setupButton: function(posX, posY, callback, src, srcClicked) {
-    var button = this.createButton(posX, posY, src, srcClicked);
+  setupButton: function(posX, posY, callback, initState, clickedState) {
+    var button = this.createButton(posX, posY, initState, clickedState);
     this.uiEntity.appendChild(button);
     button.addEventListener("click", callback);
     return button;
@@ -315,25 +305,43 @@ AFRAME.registerComponent('floating-video-controls', {
    * Creates a button with the specified textures or default colors if not provided
    * @param  {[type]} xPos       [Position between -1 (left) and 1 (right)]
    * @param  {[type]} yPos       [Position between -1 and 1]
-   * @param  {[type]} src        [Texture for the button]
-   * @param  {[type]} srcClicked [Txture for button when in clicked state]
+   * @param  {[type]} initState        [Initial State for button as mixin object]
+   * @param  {[type]} clickedState [mixin object for button when in clicked state]
    * @return {[type]}            [HTML element configured with button properties]
    */
-  createButton: function(xPos, yPos, src, srcClicked) {
+  createButton: function(xPos, yPos, initState, clickedState) {
     var button = document.createElement("a-entity");
-    button.setAttribute("geometry", {primitive: "plane", width: this.buttonHeight, height: this.buttonHeight});
-    button.setAttribute("material", {color: "white"});
+    if (initState) {
+      applyToMixin(initState, button);
+      if (initState.geometry) {
+        if (!initState.geometry.width || !initState.geometry.height) {
+          button.setAttribute("geometry", {width: this.buttonHeight, height: this.buttonHeight});
+        }
+      } else {
+        button.setAttribute("geometry", {width: this.buttonHeight, height: this.buttonHeight});
+      } 
+    } 
+    else 
+    {
+      button.setAttribute("geometry", {primitive: "plane", width: this.buttonHeight, height: this.buttonHeight});
+      button.setAttribute("material", {color: "white"});
+    }
+    
     
     var btnXPos = convertRange(xPos, -1, 1, -this.videoWidth / 2 + this.border, this.videoWidth / 2 - this.border);
     var btnYPos = convertRange(yPos, -1, 1, -this.videoHeight / 2 + this.border, this.videoHeight / 2 - this.border);
-
-    console.log("btnXPos: ", btnXPos);
     button.setAttribute("position", {x: btnXPos, y: btnYPos, z:0.1});
-    button.setAttribute("button", {clickedStateObject: {
-      material: {
-        color: "red"
-      }
-    }});
+
+    if (clickedState) {
+      button.setAttribute("button", clickedState);
+    } else {
+      button.setAttribute("button", {clickedStateObject: {
+        material: {
+          color: "red"
+        }
+      }});
+    }
+
     return button;
   },
   update: function(oldData) {
@@ -372,6 +380,17 @@ AFRAME.registerComponent('floating-video-controls', {
     };
     this.el.emit("click", eventInfo);
   },
+  fixPositionBtnPressed: function() {
+    this.forceFixPosition = !this.forceFixPosition;
+  },
+  fixPosition: function() {
+    this.el.parentElement.setAttribute("follow-rotation", {x: false, y: false, z: false});
+  },
+  unfixPosition: function() {
+    if (!this.forceFixPosition) {
+      this.el.parentElement.setAttribute("follow-rotation", {x: false, y: true, z: false});
+    }
+  },
   maximizeVideo: function(position) {
     if (position) this.moveVideo(position);
     this.el.setAttribute("position", {z: this.maximizeDepth});
@@ -379,31 +398,22 @@ AFRAME.registerComponent('floating-video-controls', {
   },
   minimizeVideo: function () {
     this.el.setAttribute("position", {z: this.minimizeDepth});
-    this.el.parentElement.setAttribute("follow-rotation", {xOffset: -50, yOffset: 0});
     this.maximized = false;
   },
   moveVideo: function(position) {
     this.el.parentElement.setAttribute("follow-rotation", position);
   },
   bringUpControls: function() {
-    this.el.setAttribute("visible", "true");
+    this.uiEntity.setAttribute("visible", "true");
     this.controlsVisible = true;
-    this.enableUI();
+    this.fixPosition();
+    this.uiEntity.play();
   },
   hideControls: function() {
-    this.el.setAttribute("visible", "false");
+    this.uiEntity.setAttribute("visible", "false");
     this.controlsVisible = false;
-    this.disableUI();
-  },
-  disableUI: function() {
-    this.uiElements.forEach(function(element) {
-      element.pause();
-    });
-  },
-  enableUI: function() {
-    this.uiElements.forEach(function(element) {
-      element.play();
-    });
+    this.unfixPosition();
+    this.uiEntity.pause();
   },
 });
 
