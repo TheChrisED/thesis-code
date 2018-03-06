@@ -268,7 +268,7 @@ AFRAME.registerComponent('floating-video-controls', {
   },
   videoPositions: {
     top: {xOffset:30, yOffset: 0, zOffset: 0},
-    bottom: {xOffset:-50, yOffset: 0, zOffset: 0},
+    bottom: {xOffset:-30, yOffset: 0, zOffset: 0},
     topLeft: {xOffset:10, yOffset: 20, zOffset: 0},
     topRight:{xOffset:30, yOffset: -20, zOffset: 0},
     right: {xOffset:0, yOffset: -20, zOffset: 0},
