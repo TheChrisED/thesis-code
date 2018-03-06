@@ -265,6 +265,7 @@ AFRAME.registerComponent('pip-video-interface', {
 AFRAME.registerComponent('floating-video-controls', {
   schema: {
     controller: {type: "selector"},
+    fixPositionDuringFreeTransform: {default: true},
   },
   videoPositions: {
     top: {xOffset:30, yOffset: 0, zOffset: 0},
@@ -308,6 +309,7 @@ AFRAME.registerComponent('floating-video-controls', {
     button.addEventListener("click", callback);
     return button;
   },
+
   /**
    * Creates a button with the specified textures or default colors if not provided
    * @param  {[type]} xPos       [Position between -1 (left) and 1 (right)]
@@ -413,6 +415,11 @@ AFRAME.registerComponent('floating-video-controls', {
     };
     this.el.emit("click", eventInfo);
     this.freeTransformActive = !this.freeTransformActive;
+    if (this.data.fixPositionDuringFreeTransform && this.freeTransformActive
+        this.fixPositionButton.components.button.buttonState != this.fixPositionButton.components.button.buttonStates.CLICKED) {
+      this.fixPositionButton.emit("click");
+    }
+    
   },
   fixPosition: function() {
     this.el.parentElement.setAttribute("follow-rotation", {x: false, y: false, z: false});
@@ -652,7 +659,7 @@ AFRAME.registerComponent('button', {
   tick: function (time, deltaTime) {
   },
   onClick: function(event) {
-    console.log("Click Event fired by Button");
+    console.log("Click Event fired by Button", event.detail);
     if (this.buttonState == this.buttonStates.ORIGINAL) {
       this.changeButtonState(this.buttonStates.CLICKED);
     }
