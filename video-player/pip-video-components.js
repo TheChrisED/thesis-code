@@ -164,6 +164,10 @@ AFRAME.registerComponent('pip-video-interface', {
     }
   },
   clickListener: function(event) {
+    if (event.detail.isUIElement) {
+      this.activateShortTimeout();
+    }
+
     if (event.detail.targetName === "maximizeButton") {
       this.toggleVideoSize();
     }
@@ -199,7 +203,6 @@ AFRAME.registerComponent('pip-video-interface', {
       this.uiComponent.bringUpControls();
       this.floatingVideo.bringUpControls();
       this.controlsVisible = true;
-      console.log("Parent element of 2d video: ", this.data.video2d.parentElement);
       this.activateTimeout();
     }
   },
@@ -355,8 +358,8 @@ AFRAME.registerComponent('floating-video-controls', {
   tick: function (time, deltaTime) {
   },
   moveRightBtnPressed: function () {
-    console.log("move right");
     var eventInfo = {
+      isUIElement: true,
       target: this.moveRightButton,
       targetName: "moveRightButton"
     };
@@ -364,8 +367,8 @@ AFRAME.registerComponent('floating-video-controls', {
     this.moveVideo(this.videoPositions.right);
   },
   moveUpBtnPressed: function() {
-    console.log("move up");
     var eventInfo = {
+      isUIElement: true,
       target: this.moveUpButton,
       targetName: "moveUpButton"
     };
@@ -373,14 +376,20 @@ AFRAME.registerComponent('floating-video-controls', {
     this.moveVideo(this.videoPositions.top);
   },
   maximizeBtnPressed: function () {
-    console.log("maximize");
     var eventInfo = {
+      isUIElement: true,
       target: this.maximizeButton,
       targetName: "maximizeButton"
     };
     this.el.emit("click", eventInfo);
   },
   fixPositionBtnPressed: function() {
+    var eventInfo = {
+      isUIElement: true,
+      target: this.fixPositionButton,
+      targetName: "fixPositionButton"
+    };
+    this.el.emit("click", eventInfo);
     this.forceFixPosition = !this.forceFixPosition;
   },
   fixPosition: function() {
