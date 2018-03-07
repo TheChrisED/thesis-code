@@ -416,7 +416,7 @@ AFRAME.registerComponent('floating-video-controls', {
     this.el.emit("click", eventInfo);
     this.freeTransformActive = !this.freeTransformActive;
     if (this.data.fixPositionDuringFreeTransform && this.freeTransformActive
-        this.fixPositionButton.components.button.buttonState != this.fixPositionButton.components.button.buttonStates.CLICKED) {
+        && this.fixPositionButton.components.button.buttonState != this.fixPositionButton.components.button.buttonStates.CLICKED) {
       this.fixPositionButton.emit("click");
     }
     
