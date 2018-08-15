@@ -23,7 +23,7 @@
     <!-- Specify our scene. -->
     <a-scene>
       <!-- Define camera with zero user height, movement disabled and arrow key rotation added. -->
-      <a-camera position="0 0 0" id="main-camera" user-height="1.6" wasd-controls-enabled="false" arrow-key-rotation gamepad-controls>
+      <a-camera position="0 0 0" id="main-camera" user-height="0" wasd-controls-enabled="false" arrow-key-rotation gamepad-controls>
         <!-- Text element for display messaging.  Hide once video is playing. -->
         <a-entity id="msg" position="0 -0.3 -1.5" text="align:center; 
                 width:3;
@@ -39,7 +39,7 @@
       </a-camera>
 
       <!-- Picture in Picture Videoplayer 360 Video + 2D Video-->
-      <a-entity id="pip-video-interface" pip-video-interface="video360: #video360-player; video2d: #video2d-player;" follow-position="entity: #main-camera">
+      <a-entity id="pip-video-interface" pip-video-interface="video360: #video360-player; video2d: #video2d-player; camera: #main-camera" follow-position="entity: #main-camera">
         <!-- The original example also has this 180 degree rotation, to appear to be going forward. -->
         <a-videosphere id="video360-player" rotation="0 180 0" src="#video" 
                        play-on-window-click

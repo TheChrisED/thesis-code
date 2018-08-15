@@ -104,6 +104,7 @@ AFRAME.registerComponent('pip-video-interface', {
   schema: {
     video360: {type: "selector"},
     video2d: {type: "selector"},
+    camera: {type: "selector", default: null},
   },
   init: function () {
     var width = this.data.video2d.getAttribute("width");
@@ -120,7 +121,17 @@ AFRAME.registerComponent('pip-video-interface', {
     this.videoControls.setAttribute("visible", "false");
     this.videoControls.setAttribute("position", {z: -1});
     this.videoControls.setAttribute("pip-video-controls", {controller: "#" + this.el.getAttribute("id")});
-    this.el.appendChild(this.videoControls);
+
+    // Pivot Point for Video Controls
+    this.videoControlsPivot = document.createElement("a-entity");
+    this.videoControlsPivot.setAttribute("id", "video-controls-pivot");
+    if (this.data.camera !== null) {
+      this.videoControlsPivot.setAttribute("follow-rotation", {entity: this.data.camera});
+      this.videoControlsPivot.setAttribute("follow-position", {entity: this.data.camera});
+    }
+
+    this.videoControlsPivot.appendChild(this.videoControls);
+    this.el.appendChild(this.videoControlsPivot);
 
     this.controlsVisible = false;
     this.timeoutActive = false;
@@ -203,6 +214,7 @@ AFRAME.registerComponent('pip-video-interface', {
       if(!this.uiComponent) {return;}
       this.uiComponent.bringUpControls();
       this.floatingVideo.bringUpControls();
+      this.fixVideoControls();
       this.controlsVisible = true;
       this.activateTimeout();
     }
@@ -211,9 +223,18 @@ AFRAME.registerComponent('pip-video-interface', {
     // this.uiComponent.el.setAttribute("visible", "false");
     this.uiComponent.hideControls();
     this.floatingVideo.hideControls();
+    this.unfixVideoControls();
     this.controlsVisible = false;
     
     this.pauseTimeout();
+  },
+  fixVideoControls: function() {
+    this.videoControlsPivot.setAttribute("follow-rotation", {x: false, y: false, z: false});
+  },
+  unfixVideoControls: function() {
+    if (this.data.camera !== null) {
+      this.videoControlsPivot.setAttribute("follow-rotation", {x: false, y: true, z: false});
+    }
   },
   updateVideoDuration: function() {
     this.videoDuration = this.video.duration > this.video360.duration ? this.video360.duration : this.video.duration;
