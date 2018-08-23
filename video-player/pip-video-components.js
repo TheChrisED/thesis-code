@@ -122,6 +122,9 @@ AFRAME.registerComponent('pip-video-interface', {
     this.videoControls.setAttribute("position", {z: -1});
     this.videoControls.setAttribute("pip-video-controls", {controller: "#" + this.el.getAttribute("id")});
 
+    this.dimmer = document.createElement("a-dimmer");
+    this.dimmer.setAttribute("visible", false);
+
     // Pivot Point for Video Controls
     this.videoControlsPivot = document.createElement("a-entity");
     this.videoControlsPivot.setAttribute("id", "video-controls-pivot");
@@ -131,6 +134,7 @@ AFRAME.registerComponent('pip-video-interface', {
     }
 
     this.videoControlsPivot.appendChild(this.videoControls);
+    this.videoControlsPivot.appendChild(this.dimmer);
     this.el.appendChild(this.videoControlsPivot);
 
     this.controlsVisible = false;
@@ -143,6 +147,10 @@ AFRAME.registerComponent('pip-video-interface', {
 
     this.data.video2d.setAttribute("floating-video-controls", {controller: "#" + this.el.getAttribute("id")});
     this.data.video2d.addEventListener("click", this.clickListener.bind(this));
+
+    // Click Anywhere
+    this.outsideVideoControls = new OutsideEventListener(this.videoControls);
+    this.outsideVideoControls.addOutsideEventListener("click", function(e){this.hideControls();}.bind(this));
 
     // Setup calculation of video duration
     this.video = this.data.video2d.components.material.material.map.image;
@@ -213,6 +221,7 @@ AFRAME.registerComponent('pip-video-interface', {
     if (!this.controlsVisible) {
       if(!this.uiComponent) {return;}
       this.uiComponent.bringUpControls();
+      this.dimmer.setAttribute("visible", true);
       this.floatingVideo.bringUpControls();
       this.fixVideoControls();
       this.controlsVisible = true;
@@ -222,6 +231,7 @@ AFRAME.registerComponent('pip-video-interface', {
   hideControls: function() {
     // this.uiComponent.el.setAttribute("visible", "false");
     this.uiComponent.hideControls();
+    this.dimmer.setAttribute("visible", false);
     this.floatingVideo.hideControls();
     this.unfixVideoControls();
     this.controlsVisible = false;
@@ -479,6 +489,26 @@ AFRAME.registerComponent('floating-video-controls', {
   },
 });
 
+AFRAME.registerPrimitive('a-dimmer', {
+  defaultComponents: {
+    geometry: {
+      primitive: "sphere",
+      radius: 100,
+    },
+    material: {
+      shader: "flat",
+      side: "back",
+      transparent: true,
+      color: "black",
+      opacity: 0.2,
+    }
+  },
+  mappings: {
+    opacity: 'material.opacity',
+    radius: 'geometry.radius'
+  },
+});
+
 // Takes care of View responsibilities (MVC pattern) for Video Interface
 AFRAME.registerComponent('pip-video-controls', {
   schema: {
@@ -528,24 +558,24 @@ AFRAME.registerComponent('pip-video-controls', {
     
     // Dimmer
 
-    var dimmerSize = 100;
-    this.dimmer = document.createElement("a-entity");
-    this.dimmer.setAttribute("geometry", {
-      primitive: "sphere",
-      radius: dimmerSize,
-    });
-    this.dimmer.setAttribute("material", {
-      shader: "flat",
-      side: "back",
-      transparent: true,
-      color: "black",
-      opacity: this.data.dimmerOpacity,
-    });
+    // var dimmerSize = 100;
+    // this.dimmer = document.createElement("a-entity");
+    // this.dimmer.setAttribute("geometry", {
+    //   primitive: "sphere",
+    //   radius: dimmerSize,
+    // });
+    // this.dimmer.setAttribute("material", {
+    //   shader: "flat",
+    //   side: "back",
+    //   transparent: true,
+    //   color: "black",
+    //   opacity: this.data.dimmerOpacity,
+    // });
 
 
     this.el.appendChild(this.playPauseButton);
     this.el.appendChild(this.slider);
-    this.el.appendChild(this.dimmer);
+    //this.el.appendChild(this.dimmer);
 
     this.uiElements.push(this.playPauseButton);
     this.uiElements.push(this.slider);
