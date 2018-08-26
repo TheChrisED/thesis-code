@@ -161,7 +161,7 @@ AFRAME.registerComponent('pip-video-interface', {
     //this.data.video2d.addEventListener("click", this.clickListener.bind(this));
 
     // Click Anywhere
-    this.outsideVideoControls = new OutsideEventListener(this.videoControls);
+    this.outsideVideoControls = new OutsideEventListener(this.videoControls, this.data.video2d);
     this.outsideVideoControls.addOutsideEventListener("click", function(e){this.toggleControls();}.bind(this));
 
     // Setup calculation of video duration
