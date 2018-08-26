@@ -142,7 +142,6 @@ AFRAME.registerComponent('pip-video-interface', {
 
     this.videoControlsPivot.appendChild(this.videoControls);
     this.videoControlsPivot.appendChild(this.dimmer);
-    //this.videoControlsPivot.appendChild(this.toggleControlsTrigger);
     this.el.appendChild(this.videoControlsPivot);
 
     this.el.appendChild(this.toggleControlsTrigger);
@@ -153,12 +152,9 @@ AFRAME.registerComponent('pip-video-interface', {
     this.controlsTimeoutMax = 10 * 1000;
     this.controlsTimeoutShort = 1 * 1000;
     this.controlsTimeout = this.controlsTimeoutMax;
-    this.clickEmptyCallback = this.bringUpControls.bind(this);
-    //window.addEventListener("click", this.clickEmptyCallback);
     
 
     this.data.video2d.setAttribute("floating-video-controls", {controller: "#" + this.el.getAttribute("id")});
-    //this.data.video2d.addEventListener("click", this.clickListener.bind(this));
 
     // Click Anywhere
     this.outsideVideoControls = new OutsideEventListener(this.videoControls, this.data.video2d);
@@ -248,7 +244,6 @@ AFRAME.registerComponent('pip-video-interface', {
     this.unfixVideoControls();
     this.controlsVisible = false;
     
-    //window.removeEventListener("click", this.clickEmptyCallback);
     this.pauseTimeout();
   },
   fixVideoControls: function() {

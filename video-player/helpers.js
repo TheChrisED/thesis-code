@@ -15,32 +15,24 @@ var OutsideEventListener = function() {
 
 	this.addOutsideEventListener = function(eventType, callback) {
 		var outsideCallback = function(event) {
-			//console.log(event);
+			// Ignore Standard Events from the browser (only want to react to A-Frame events)
 			if (event.isTrusted)
 				return;
+			// Ignore Cursor events, so that function doesn't react to event twice
 			if (event.target.hasAttribute("cursor"))
-				//console.log("Cursor Element Target", event.detail.intersectedEl);
 				return;
 
-			console.log(event);
-
-			if (this.isInsideListenerTargets(event.target)) {
+			if (this.isInsideTargets(event.target)) {
 				console.log("Event occured inside target");
 			} else {
 				console.log("Event occured outside target");
 				callback(event);
 			}
-			// if (!(event.target === this.target || this.isParent(this.target, event.target))) {
-			// 	console.log("Event occured outside target");
-			// 	callback(event);
-			// } else {
-			// 	console.log("Event occured inside target");
-			// }
 		}.bind(this);
 		document.addEventListener(eventType, outsideCallback);
 	};
 
-	this.isInsideListenerTargets = function(element) {
+	this.isInsideTargets = function(element) {
 		console.log(this.targets[0]);
 		for (var i = 0; i < this.targets.length; ++i) {
 			var target = this.targets[i];
