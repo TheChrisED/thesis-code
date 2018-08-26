@@ -232,6 +232,7 @@ AFRAME.registerComponent('pip-video-interface', {
       this.dimmer.setAttribute("visible", true);
       this.floatingVideo.bringUpControls();
       this.fixVideoControls();
+      this.outsideVideoControls.addTarget(this.data.video2d);
       this.controlsVisible = true;
       this.activateTimeout();
     }
@@ -242,6 +243,7 @@ AFRAME.registerComponent('pip-video-interface', {
     this.dimmer.setAttribute("visible", false);
     this.floatingVideo.hideControls();
     this.unfixVideoControls();
+    this.outsideVideoControls.removeTarget(this.data.video2d);
     this.controlsVisible = false;
     
     this.pauseTimeout();

@@ -55,4 +55,20 @@ var OutsideEventListener = function() {
 	     }
 	     return false;
 	};
+
+	this.addTarget = function(target) {
+		if (!this.targets.includes(target)) {
+			this.targets.push(target);
+		}
+	};
+
+	this.removeTarget = function(target) {
+		var index = this.targets.indexOf(target);
+		if (index > -1) {
+		    this.targets.splice(index, 1);
+		    return true;
+		} else {
+			return false;
+		}
+	};
 };
