@@ -122,8 +122,15 @@ AFRAME.registerComponent('pip-video-interface', {
     this.videoControls.setAttribute("position", {z: -1});
     this.videoControls.setAttribute("pip-video-controls", {controller: "#" + this.el.getAttribute("id")});
 
+    // Dimmer
     this.dimmer = document.createElement("a-dimmer");
     this.dimmer.setAttribute("visible", false);
+
+    // Click Anywhere Trigger
+    this.toggleControlsTrigger = document.createElement("a-dimmer");
+    this.toggleControlsTrigger.setAttribute("id", "toggle-controls-trigger");
+    this.toggleControlsTrigger.setAttribute("opacity", 0.0);
+    this.toggleControlsTrigger.setAttribute("size", 110.0);
 
     // Pivot Point for Video Controls
     this.videoControlsPivot = document.createElement("a-entity");
@@ -135,22 +142,27 @@ AFRAME.registerComponent('pip-video-interface', {
 
     this.videoControlsPivot.appendChild(this.videoControls);
     this.videoControlsPivot.appendChild(this.dimmer);
+    //this.videoControlsPivot.appendChild(this.toggleControlsTrigger);
     this.el.appendChild(this.videoControlsPivot);
+
+    this.el.appendChild(this.toggleControlsTrigger);
+    
 
     this.controlsVisible = false;
     this.timeoutActive = false;
     this.controlsTimeoutMax = 10 * 1000;
     this.controlsTimeoutShort = 1 * 1000;
     this.controlsTimeout = this.controlsTimeoutMax;
-    window.addEventListener("click", this.bringUpControls.bind(this));
+    this.clickEmptyCallback = this.bringUpControls.bind(this);
+    //window.addEventListener("click", this.clickEmptyCallback);
     
 
     this.data.video2d.setAttribute("floating-video-controls", {controller: "#" + this.el.getAttribute("id")});
-    this.data.video2d.addEventListener("click", this.clickListener.bind(this));
+    //this.data.video2d.addEventListener("click", this.clickListener.bind(this));
 
     // Click Anywhere
     this.outsideVideoControls = new OutsideEventListener(this.videoControls);
-    this.outsideVideoControls.addOutsideEventListener("click", function(e){this.hideControls();}.bind(this));
+    this.outsideVideoControls.addOutsideEventListener("click", function(e){this.toggleControls();}.bind(this));
 
     // Setup calculation of video duration
     this.video = this.data.video2d.components.material.material.map.image;
@@ -236,6 +248,7 @@ AFRAME.registerComponent('pip-video-interface', {
     this.unfixVideoControls();
     this.controlsVisible = false;
     
+    //window.removeEventListener("click", this.clickEmptyCallback);
     this.pauseTimeout();
   },
   fixVideoControls: function() {

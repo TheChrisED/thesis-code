@@ -8,12 +8,14 @@ var OutsideEventListener = function(target) {
 
 	this.addOutsideEventListener = function(eventType, callback) {
 		var outsideCallback = function(event) {
+			//console.log(event);
 			if (event.isTrusted)
 				return;
 			if (event.target.hasAttribute("cursor"))
+				//console.log("Cursor Element Target", event.detail.intersectedEl);
 				return;
 
-			//console.log(event);
+			console.log(event);
 			if (!(event.target === this.target || this.isParent(this.target, event.target))) {
 				console.log("Event occured outside target");
 				callback(event);
