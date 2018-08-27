@@ -190,6 +190,7 @@ AFRAME.registerComponent('pip-video-interface', {
     }
     if (this.videoDuration && this.uiComponent) {
       this.uiComponent.setSlider(this.video360.currentTime / this.videoDuration);
+      this.videoControls.components["pip-video-controls"].setElapsedTime(this.video360.currentTime);
     }
   },
   clickListener: function(event) {
@@ -571,6 +572,7 @@ AFRAME.registerComponent('pip-video-controls', {
     // Text Elements for video duration
 
     this.displayDuration = "-";
+    this.displayElapsedTime = "-";
 
     this.videoDuration = document.createElement("a-text");
     this.videoDuration.setAttribute("value", "0:00 / -");
@@ -628,9 +630,27 @@ AFRAME.registerComponent('pip-video-controls', {
       this.updateElapsedDurationLabel();
     }
   },
+  setElapsedTime: function(timeInSeconds) {
+    if (!timeInSeconds || isNaN(timeInSeconds))
+      return;
+    // var decimalMinutes = durationInSeconds / 60.0;
+    // var minutes = Math.floor(decimalMinutes);
+    // var seconds = (decimalMinutes - minutes) * 60;
+    // seconds = Math.floor(seconds);
+    // this.duration = minutes < 10? "0" + minutes: "" + minutes;
+    // this.duration += seconds < 10? ":0" + seconds: ":" + seconds;
+    var elapsed = convertToDisplayTime(timeInSeconds);
+    this.updateElapsedTimeLabel(elapsed);
+  },
+  updateElapsedTimeLabel: function(displayElapsedTime) {
+    if (this.displayElapsedTime !== displayElapsedTime) {
+      this.displayElapsedTime = displayElapsedTime;
+      this.updateElapsedDurationLabel();
+    }
+  },
   updateElapsedDurationLabel: function() {
     console.log("updateElapsedDurationLabel called");
-    this.videoDuration.setAttribute("value", "00:00 / " + this.displayDuration);
+    this.videoDuration.setAttribute("value", this.displayElapsedTime + " / " + this.displayDuration);
   },
   pause: function () {         
   },
