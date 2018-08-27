@@ -33,11 +33,8 @@ var OutsideEventListener = function() {
 	};
 
 	this.isInsideTargets = function(element) {
-		console.log(this.targets[0]);
 		for (var i = 0; i < this.targets.length; ++i) {
 			var target = this.targets[i];
-			console.log("Target: ", target);
-			console.log("Element: ", element);
 			if (element === target || this.isParent(target, element)) {
 				return true;
 			}

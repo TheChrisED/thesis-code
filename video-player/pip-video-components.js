@@ -437,12 +437,19 @@ AFRAME.registerComponent('floating-video-controls', {
     this.moveVideo(this.videoPositions.bottom);
   },
   maximizeBtnPressed: function () {
+    console.log("maximizeButton pressed!");
     var eventInfo = {
       isUIElement: true,
       target: this.maximizeButton,
       targetName: "maximizeButton"
     };
     this.el.emit("click", eventInfo);
+
+    if (this.maximized) {
+      this.minimizeVideo();
+    } else {
+      this.maximizeVideo();
+    }
   },
   fixPositionBtnPressed: function() {
     var eventInfo = {
@@ -621,7 +628,6 @@ AFRAME.registerComponent('pip-video-controls', {
     // this.duration = minutes < 10? "0" + minutes: "" + minutes;
     // this.duration += seconds < 10? ":0" + seconds: ":" + seconds;
     var duration = convertToDisplayTime(durationInSeconds);
-    console.log("Display Duration: ", duration);
     this.updateDurationLabel(duration);
   },
   updateDurationLabel: function(displayDuration) {
@@ -649,7 +655,6 @@ AFRAME.registerComponent('pip-video-controls', {
     }
   },
   updateElapsedDurationLabel: function() {
-    console.log("updateElapsedDurationLabel called");
     this.videoDuration.setAttribute("value", this.displayElapsedTime + " / " + this.displayDuration);
   },
   pause: function () {         
