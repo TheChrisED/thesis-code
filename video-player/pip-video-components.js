@@ -166,6 +166,7 @@ AFRAME.registerComponent('pip-video-interface', {
     this.updateVideoDuration();
     this.video.addEventListener("durationchange", this.updateVideoDuration.bind(this));
     this.video360.addEventListener("durationchange", this.updateVideoDuration.bind(this));
+    this.videoControls.addEventListener("loaded", function(){console.log("Reacting to loaded event...");this.updateVideoDuration();}.bind(this));
   },
   registerUI: function(uiComponent) {
     this.uiComponent = uiComponent;
@@ -260,6 +261,9 @@ AFRAME.registerComponent('pip-video-interface', {
     this.videoDuration = this.video.duration > this.video360.duration ? this.video360.duration : this.video.duration;
     console.log("updateVideoDuration called");
     console.log("Video Duration: ", this.videoDuration);
+    if (typeof this.videoControls.components !== undefined) {
+      this.videoControls.components["pip-video-controls"].setVideoDuration(this.videoDuration);
+    }
   },
   toggleVideos: function() {
     var video = this.data.video2d.components.material.material.map.image;
@@ -564,32 +568,32 @@ AFRAME.registerComponent('pip-video-controls', {
       //buttonClickedState: "#tomatoColor",
     });
 
-    
-    
-    // Dimmer
+    // Text Elements for video duration
 
-    // var dimmerSize = 100;
-    // this.dimmer = document.createElement("a-entity");
-    // this.dimmer.setAttribute("geometry", {
-    //   primitive: "sphere",
-    //   radius: dimmerSize,
-    // });
-    // this.dimmer.setAttribute("material", {
-    //   shader: "flat",
-    //   side: "back",
-    //   transparent: true,
-    //   color: "black",
-    //   opacity: this.data.dimmerOpacity,
-    // });
+    this.videoDuration = document.createElement("a-text");
+    this.videoDuration.setAttribute("value", "0:00 / -");
+    this.videoDuration.setAttribute("font", "roboto");
+    this.videoDuration.setAttribute("position", {x: -1, y: -0.7, z: -2});
+    this.videoDuration.setAttribute("width", 3);
 
 
+    this.el.appendChild(this.videoDuration);
     this.el.appendChild(this.playPauseButton);
     this.el.appendChild(this.slider);
     //this.el.appendChild(this.dimmer);
 
+    this.uiElements.push(this.videoDuration);
     this.uiElements.push(this.playPauseButton);
     this.uiElements.push(this.slider);
     this.playPauseButton.addEventListener("click", this.playPause.bind(this));
+
+    // Emit Has-loaded Event
+    var eventInfo = {
+      isUIElement: true,
+      target: this,
+      targetName: "pip-video-controls"
+    };
+    this.el.emit("loaded", eventInfo);
   },
   play: function () {
     this.data.controller.components["pip-video-interface"].registerUI(this);
@@ -601,6 +605,17 @@ AFRAME.registerComponent('pip-video-controls', {
       
 
     }.bind(this));
+  },
+  setVideoDuration: function(durationInSeconds) {
+    if (!durationInSeconds || isNaN(durationInSeconds))
+      return;
+
+    var decimalMinutes = durationInSeconds / 60.0;
+    var minutes = Math.floor(decimalMinutes);
+    var seconds = (decimalMinutes - minutes) * 60;
+    seconds = Math.floor(seconds);
+    this.duration = "" + minutes + seconds;
+    console.log("Display Duration: ", this.duration);
   },
   pause: function () {         
   },
