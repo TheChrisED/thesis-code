@@ -72,3 +72,15 @@ var OutsideEventListener = function() {
 		}
 	};
 };
+
+var convertToDisplayTime = function(timeInSeconds) {
+
+	var decimalMinutes = timeInSeconds / 60.0;
+	var minutes = Math.floor(decimalMinutes);
+	var seconds = (decimalMinutes - minutes) * 60;
+	seconds = Math.floor(seconds);
+	var displayTime = minutes < 10? "0" + minutes: "" + minutes;
+	displayTime += seconds < 10? ":0" + seconds: ":" + seconds;
+
+	return displayTime;
+};

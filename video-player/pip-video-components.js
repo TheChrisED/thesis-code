@@ -570,6 +570,8 @@ AFRAME.registerComponent('pip-video-controls', {
 
     // Text Elements for video duration
 
+    this.displayDuration = "-";
+
     this.videoDuration = document.createElement("a-text");
     this.videoDuration.setAttribute("value", "0:00 / -");
     this.videoDuration.setAttribute("font", "roboto");
@@ -610,12 +612,25 @@ AFRAME.registerComponent('pip-video-controls', {
     if (!durationInSeconds || isNaN(durationInSeconds))
       return;
 
-    var decimalMinutes = durationInSeconds / 60.0;
-    var minutes = Math.floor(decimalMinutes);
-    var seconds = (decimalMinutes - minutes) * 60;
-    seconds = Math.floor(seconds);
-    this.duration = "" + minutes + seconds;
-    console.log("Display Duration: ", this.duration);
+    // var decimalMinutes = durationInSeconds / 60.0;
+    // var minutes = Math.floor(decimalMinutes);
+    // var seconds = (decimalMinutes - minutes) * 60;
+    // seconds = Math.floor(seconds);
+    // this.duration = minutes < 10? "0" + minutes: "" + minutes;
+    // this.duration += seconds < 10? ":0" + seconds: ":" + seconds;
+    var duration = convertToDisplayTime(durationInSeconds);
+    console.log("Display Duration: ", duration);
+    this.updateDurationLabel(duration);
+  },
+  updateDurationLabel: function(displayDuration) {
+    if (this.displayDuration !== displayDuration) {
+      this.displayDuration = displayDuration;
+      this.updateElapsedDurationLabel();
+    }
+  },
+  updateElapsedDurationLabel: function() {
+    console.log("updateElapsedDurationLabel called");
+    this.videoDuration.setAttribute("value", "00:00 / " + this.displayDuration);
   },
   pause: function () {         
   },
