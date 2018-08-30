@@ -340,8 +340,21 @@ AFRAME.registerComponent('floating-video-controls', {
     this.el.appendChild(this.uiEntity);
     this.hideControls();
 
+    // Maximize Minimize Button
+    this.maximizeButton = document.createElement("a-entity");
+    this.maximizeButton.setAttribute("material", {color: "white", src: "#maximize-icon", transparent: false});
+    //this.playPauseButton.setAttribute("geometry", {primitive: "plane", width: 1, height: 1,});
+    this.maximizeButton.setAttribute("geometry", {primitive: "circle", radius: 0.5*this.buttonHeight});
+    maximizePosXY = convertRange(0, -1, 1, -this.videoWidth / 2 + this.border, this.videoWidth / 2 - this.border);
+    this.maximizeButton.setAttribute("position", {x: maximizePosXY, y: maximizePosXY, z:0.1});
+    //this.playPauseButton.setAttribute("button", {clickedState: "#tomatoColor"});
+    this.maximizeButton.setAttribute("button", {clickedStateObject: {material: {src: "#minimize-icon"}}});
+    this.uiEntity.appendChild(this.maximizeButton);
+    this.maximizeButton.addEventListener("click", this.maximizeBtnPressed.bind(this));
 
-    this.maximizeButton = this.setupButton(0, 0, this.maximizeBtnPressed.bind(this));
+
+    //this.maximizeButton = this.setupButton(0, 0, this.maximizeBtnPressed.bind(this));
+    //this.maximizeButton.setAttribute("src", "#maximize-icon");
     this.moveRightButton = this.setupButton(1, 0, this.moveRightBtnPressed.bind(this), null, {material: {color: "white"}});
     this.moveUpButton = this.setupButton(0, 1, this.moveUpBtnPressed.bind(this), null, {material: {color: "white"}});
     this.moveDownButton = this.setupButton(0, -1, this.moveDownBtnPressed.bind(this), null, {material: {color: "white"}});
