@@ -343,24 +343,37 @@ AFRAME.registerComponent('floating-video-controls', {
     // Maximize Minimize Button
     this.maximizeButton = document.createElement("a-entity");
     this.maximizeButton.setAttribute("material", {color: "white", src: "#maximize-icon", transparent: false});
-    //this.playPauseButton.setAttribute("geometry", {primitive: "plane", width: 1, height: 1,});
     this.maximizeButton.setAttribute("geometry", {primitive: "circle", radius: 0.5*this.buttonHeight});
     maximizePosXY = convertRange(0, -1, 1, -this.videoWidth / 2 + this.border, this.videoWidth / 2 - this.border);
     this.maximizeButton.setAttribute("position", {x: maximizePosXY, y: maximizePosXY, z:0.1});
-    //this.playPauseButton.setAttribute("button", {clickedState: "#tomatoColor"});
     this.maximizeButton.setAttribute("button", {clickedStateObject: {material: {src: "#minimize-icon"}}});
     this.uiEntity.appendChild(this.maximizeButton);
     this.maximizeButton.addEventListener("click", this.maximizeBtnPressed.bind(this));
 
+    // Pin Unpin Button
+    this.fixPositionButton = document.createElement("a-entity");
+    this.fixPositionButton.setAttribute("material", {color: "white", src: "#pin-icon", transparent: false});
+    this.fixPositionButton.setAttribute("geometry", {primitive: "circle", radius: 0.5*this.buttonHeight});
+    this.setRelativePosition(this.fixPositionButton, -1, -1);
+    this.fixPositionButton.setAttribute("button", {clickedStateObject: {material: {src: "#unpin-icon"}}});
+    this.uiEntity.appendChild(this.fixPositionButton);
+    this.fixPositionButton.addEventListener("click", this.fixPositionBtnPressed.bind(this));
+
 
     //this.maximizeButton = this.setupButton(0, 0, this.maximizeBtnPressed.bind(this));
-    //this.maximizeButton.setAttribute("src", "#maximize-icon");
     this.moveRightButton = this.setupButton(1, 0, this.moveRightBtnPressed.bind(this), null, {material: {color: "white"}});
     this.moveUpButton = this.setupButton(0, 1, this.moveUpBtnPressed.bind(this), null, {material: {color: "white"}});
     this.moveDownButton = this.setupButton(0, -1, this.moveDownBtnPressed.bind(this), null, {material: {color: "white"}});
-    this.fixPositionButton = this.setupButton(-1, -1, this.fixPositionBtnPressed.bind(this));
+    //this.fixPositionButton = this.setupButton(-1, -1, this.fixPositionBtnPressed.bind(this));
     this.freeTransformButton = this.setupButton(-0.5, -1, this.freeTransformBtnPressed.bind(this));
 
+  },
+  setRelativePosition: function(button, posX, posY) {
+    button.setAttribute("position", {
+      x: convertRange(posX, -1, 1, -this.videoWidth / 2 + this.border, this.videoWidth / 2 - this.border), 
+      y: convertRange(posY, -1, 1, -this.videoHeight / 2 + this.border, this.videoHeight / 2 - this.border), 
+      z:0.1
+    });
   },
   setupButton: function(posX, posY, callback, initState, clickedState) {
     var button = this.createButton(posX, posY, initState, clickedState);
