@@ -359,13 +359,22 @@ AFRAME.registerComponent('floating-video-controls', {
     this.uiEntity.appendChild(this.fixPositionButton);
     this.fixPositionButton.addEventListener("click", this.fixPositionBtnPressed.bind(this));
 
+    // Free Transform/ Drag n' Drop Button
+    this.freeTransformButton = document.createElement("a-entity");
+    this.freeTransformButton.setAttribute("material", {color: "white", src: "#free-transform-icon", transparent: false});
+    this.freeTransformButton.setAttribute("geometry", {primitive: "circle", radius: 0.5*this.buttonHeight});
+    this.setRelativePosition(this.freeTransformButton, -0.5, -1);
+    this.freeTransformButton.setAttribute("button", {clickedStateObject: {material: {src: "#free-transform-active-icon"}}});
+    this.uiEntity.appendChild(this.freeTransformButton);
+    this.freeTransformButton.addEventListener("click", this.freeTransformBtnPressed.bind(this));
+
 
     //this.maximizeButton = this.setupButton(0, 0, this.maximizeBtnPressed.bind(this));
     this.moveRightButton = this.setupButton(1, 0, this.moveRightBtnPressed.bind(this), null, {material: {color: "white"}});
     this.moveUpButton = this.setupButton(0, 1, this.moveUpBtnPressed.bind(this), null, {material: {color: "white"}});
     this.moveDownButton = this.setupButton(0, -1, this.moveDownBtnPressed.bind(this), null, {material: {color: "white"}});
     //this.fixPositionButton = this.setupButton(-1, -1, this.fixPositionBtnPressed.bind(this));
-    this.freeTransformButton = this.setupButton(-0.5, -1, this.freeTransformBtnPressed.bind(this));
+    //this.freeTransformButton = this.setupButton(-0.5, -1, this.freeTransformBtnPressed.bind(this));
 
   },
   setRelativePosition: function(button, posX, posY) {
