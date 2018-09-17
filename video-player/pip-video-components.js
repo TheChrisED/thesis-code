@@ -370,9 +370,13 @@ AFRAME.registerComponent('floating-video-controls', {
 
 
     //this.maximizeButton = this.setupButton(0, 0, this.maximizeBtnPressed.bind(this));
-    this.moveRightButton = this.setupButton(1, 0, this.moveRightBtnPressed.bind(this), null, {material: {color: "white"}});
-    this.moveUpButton = this.setupButton(0, 1, this.moveUpBtnPressed.bind(this), null, {material: {color: "white"}});
-    this.moveDownButton = this.setupButton(0, -1, this.moveDownBtnPressed.bind(this), null, {material: {color: "white"}});
+
+    // Standard position buttons 
+    // this.moveRightButton = this.setupButton(1, 0, this.moveRightBtnPressed.bind(this), null, {material: {color: "white"}});
+    // this.moveUpButton = this.setupButton(0, 1, this.moveUpBtnPressed.bind(this), null, {material: {color: "white"}});
+    // this.moveDownButton = this.setupButton(0, -1, this.moveDownBtnPressed.bind(this), null, {material: {color: "white"}});
+
+
     //this.fixPositionButton = this.setupButton(-1, -1, this.fixPositionBtnPressed.bind(this));
     //this.freeTransformButton = this.setupButton(-0.5, -1, this.freeTransformBtnPressed.bind(this));
 
