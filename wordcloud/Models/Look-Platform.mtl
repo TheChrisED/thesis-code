@@ -1,8 +1,12 @@
 newmtl Dark-Matte
-Kd 0.301 0.301 0.301
+Kd 0.1 0.1 0.1
+Ks 0.2 0.2 0.2
+Ns 0.0
 d 1
 
 newmtl Shiny
-Kd 0.497 0.497 0.497
+Kd 0.3 0.3 0.3
+Ks 0.2 0.2 0.2
+Ns 56.5
 d 1
 

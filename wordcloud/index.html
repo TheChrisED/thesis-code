@@ -11,7 +11,8 @@
     <a-scene>
       <a-assets>
         <img id="venus-texture" src="textures/2k_venus_surface_small.jpeg">
-        <img id="space-texture" crossorigin="anonymous" src="https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/YWAdzU2/videoblocks-360-vr-space-3021-virtual-reality-video-flying-through-star-fields-in-space-loop-designed-to-be-used-in-oculus-rift-samsung-gear-vr-and-other-virtual-reality-displays_re-3qebpl_thumbnail-full05.png">
+        <img id="space-texture" crossorigin="anonymous" src="textures/videoblocks-360-vr-space.png">
+        <img id="hud" src="textures/sci-fi_hud.png" >
 
         <a-asset-item id="platform-obj" src="Models/Look-Platform.obj"></a-asset-item>
         <a-asset-item id="platform-mtl" src="Models/Look-Platform.mtl"></a-asset-item>
@@ -24,9 +25,10 @@
 
       <a-sky src="#space-texture"></a-sky>
 
-      <a-camera position="0 1.7 0" id="main-camera"></a-camera>
+      <a-camera position="0 1.9 0" id="main-camera"></a-camera>
 
       <a-entity obj-model="obj: #platform-obj; mtl: #platform-mtl" scale="0.5 1 0.5"></a-entity>
+      <a-image src="#hud" transparent="true" width="1.0" height="0.333" position="-0.03289267211463166 1.5591924874946197 -0.3051888959272364" material="" geometry="" rotation="-48.72988717974592 0 0"></a-image>
 
       <a-entity mixin="sphere-mixin group1" geometry="radius:0.5" position="0 0 -4.897699115933795">
         <a-entity mixin="text-mixin" text="value:Virtual Reality" position="0 0.7 0" scale="5 5 5"></a-entity>
