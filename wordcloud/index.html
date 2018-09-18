@@ -16,8 +16,9 @@
         <img id="jupiter-texture" src="textures/2k_jupiter_small.jpeg">
 
         <img id="space-texture" crossorigin="anonymous" src="textures/videoblocks-360-vr-space.png">
-        <img id="hud-empty" src="textures/sci-fi_hud.png" >
-        <img id="vr-article" src="textures/sci-fi_hud_article-vr.png" >
+        <img id="hud-empty" src="textures/sci-fi_hud.png">
+        <img id="vr-article" src="textures/sci-fi_hud_article-vr.png">
+        <img id="haptics-article" src="textures/sci-fi_hud_article-haptics.png">
 
         <a-asset-item id="platform-obj" src="Models/Look-Platform.obj"></a-asset-item>
         <a-asset-item id="platform-mtl" src="Models/Look-Platform.mtl"></a-asset-item>
@@ -61,6 +62,9 @@
       </a-entity>
       <a-entity mixin="medium sphere-mixin group3" position="1.7815205015491435 1.5897534682373893 -4.489" rotation="0 -34.83016353801345 0">
         <a-entity mixin="text-mixin" text="value:Comfortable Interaction" position="0 0.7 0" scale="5 5 5"></a-entity>
+      </a-entity>
+      <a-entity mixin="medium sphere-mixin group3 active-planet" position="-1.4437214214037262 1.8291215651294106 -7.538761159147235" rotation="0 14.859446097924646 0" event-set__click="_target: #hud; material.src: #haptics-article;">
+        <a-entity mixin="text-mixin" text="value:Haptic Feedback" position="0 0.7 0" scale="5 5 5"></a-entity>
       </a-entity>
 
     </a-scene>
