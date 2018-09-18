@@ -23,6 +23,7 @@
         <img id="vr-article" src="textures/sci-fi_hud_article-vr.png">
         <img id="haptics-article" src="textures/sci-fi_hud_article-haptics.png">
         <img id="graphics-article" src="textures/sci-fi_hud_article-3dgraphics.png">
+        <img id="locomotion-article" src="textures/sci-fi_hud_article-redirected-walking.png">
 
         <a-asset-item id="platform-obj" src="Models/Look-Platform.obj"></a-asset-item>
         <a-asset-item id="platform-mtl" src="Models/Look-Platform.mtl"></a-asset-item>
@@ -59,7 +60,7 @@
       <a-entity mixin="medium sphere-mixin group1" position="3.6359812800124445 0 -3.889202881272218" rotation="0 -24.146136408798377 0">
         <a-entity mixin="text-mixin" text="value:Head Mounted Display" position="0 0.7 0" scale="5 5 5"></a-entity>
       </a-entity>
-      <a-entity mixin="medium sphere-mixin group1" position="-3.8713946245933566 0 -3.3259752285869473" rotation="0 39.18410173541614 0">
+      <a-entity mixin="medium sphere-mixin group1 active-planet" position="-3.8713946245933566 0 -3.3259752285869473" rotation="0 39.18410173541614 0" event-set__click="_target: #hud; material.src: #locomotion-article;">
         <a-entity mixin="text-mixin" text="value:Redirected Walking" position="0 0.7 0" scale="5 5 5"></a-entity>
       </a-entity>
 
