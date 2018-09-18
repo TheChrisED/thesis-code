@@ -1,0 +1,8 @@
+newmtl Dark-Matte
+Kd 0.301 0.301 0.301
+d 1
+
+newmtl Shiny
+Kd 0.497 0.497 0.497
+d 1
+

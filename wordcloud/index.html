@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+    <title>Wordcloud</title>
+    <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
+  </head>
+
+  <body>
+
+    <a-scene>
+      <a-assets>
+        <img id="venus-texture" src="textures/2k_venus_surface_small.jpeg">
+        <img id="space-texture" crossorigin="anonymous" src="https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/YWAdzU2/videoblocks-360-vr-space-3021-virtual-reality-video-flying-through-star-fields-in-space-loop-designed-to-be-used-in-oculus-rift-samsung-gear-vr-and-other-virtual-reality-displays_re-3qebpl_thumbnail-full05.png">
+
+        <a-asset-item id="platform-obj" src="Models/Look-Platform.obj"></a-asset-item>
+        <a-asset-item id="platform-mtl" src="Models/Look-Platform.mtl"></a-asset-item>
+      </a-assets>
+      <a-assets>
+          <a-mixin id="sphere-mixin" material="color: white; opacity:1.0;" geometry="primitive: sphere;"></a-mixin>
+          <a-mixin id="text-mixin" text="color: white; align: center;"></a-mixin>
+          <a-mixin id="group1" material="src: #venus-texture"></a-mixin>
+      </a-assets>
+
+      <a-sky src="#space-texture"></a-sky>
+
+      <a-camera position="0 1.7 0" id="main-camera"></a-camera>
+
+      <a-entity obj-model="obj: #platform-obj; mtl: #platform-mtl" scale="0.5 1 0.5"></a-entity>
+
+      <a-entity mixin="sphere-mixin group1" geometry="radius:0.5" position="0 0 -4.897699115933795">
+        <a-entity mixin="text-mixin" text="value:Virtual Reality" position="0 0.7 0" scale="5 5 5"></a-entity>
+      </a-entity>
+      <a-entity mixin="sphere-mixin group1" geometry="radius:0.5" position="3.6359812800124445 0 -3.889202881272218" rotation="0 -24.146136408798377 0">
+        <a-entity mixin="text-mixin" text="value:Head Mounted Display" position="0 0.7 0" scale="5 5 5"></a-entity>
+      </a-entity>
+      <a-entity mixin="sphere-mixin group1" geometry="radius:0.5" position="-3.8713946245933566 0 -3.3259752285869473" rotation="0 39.18410173541614 0">
+        <a-entity mixin="text-mixin" text="value:Redirected Walking" position="0 0.7 0" scale="5 5 5"></a-entity>
+      </a-entity>
+      <a-entity mixin="sphere-mixin" geometry="radius:0.5" position="-5.808188085589682 0 0.754145475687809" rotation="0 106.07351123703846 0">
+        <a-entity mixin="text-mixin" text="value:Interaction Design" position="0 0.7 0" scale="5 5 5"></a-entity>
+      </a-entity>
+
+    </a-scene>
+  </body>
+</html>
