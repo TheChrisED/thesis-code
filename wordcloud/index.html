@@ -14,22 +14,27 @@
         <img id="venus-texture" src="textures/2k_venus_surface_small.jpeg">
         <img id="venus-atmosphere-texture" src="textures/2k_venus_atmosphere_small.jpeg">
         <img id="jupiter-texture" src="textures/2k_jupiter_small.jpeg">
+        <img id="uranus-texture" src="textures/2k_uranus_small.jpeg">
+        <img id="neptune-texture" src="textures/2k_neptune_small.jpeg">
+        <img id="mercury-texture" src="textures/2k_mercury_small.jpeg">
 
         <img id="space-texture" crossorigin="anonymous" src="textures/videoblocks-360-vr-space.png">
         <img id="hud-empty" src="textures/sci-fi_hud.png">
         <img id="vr-article" src="textures/sci-fi_hud_article-vr.png">
         <img id="haptics-article" src="textures/sci-fi_hud_article-haptics.png">
+        <img id="graphics-article" src="textures/sci-fi_hud_article-3dgraphics.png">
 
         <a-asset-item id="platform-obj" src="Models/Look-Platform.obj"></a-asset-item>
         <a-asset-item id="platform-mtl" src="Models/Look-Platform.mtl"></a-asset-item>
       </a-assets>
       <a-assets>
-          <a-mixin id="sphere-mixin" material="color: white; opacity:1.0;" geometry="primitive: sphere;"></a-mixin>
+          <a-mixin id="sphere-mixin" material="color: white; opacity:1.0; metalness: 0.0; roughness: 1.0;" geometry="primitive: sphere;"></a-mixin>
           <a-mixin id="text-mixin" text="color: white; align: center;"></a-mixin>
           <a-mixin id="medium" geometry="radius:0.4"></a-mixin>
           <a-mixin id="group1" material="src: #venus-texture"></a-mixin>
           <a-mixin id="group2" material="src: #venus-atmosphere-texture"></a-mixin>
           <a-mixin id="group3" material="src: #jupiter-texture"></a-mixin>
+          <a-mixin id="group4" material="src: #neptune-texture"></a-mixin>
           <a-mixin id="active-planet" event-set__mouseenter="geometry.radius:0.6" event-set__mouseleave="geometry.radius:0.4"></a-mixin>
       </a-assets>
 
@@ -38,6 +43,11 @@
       <a-camera position="0 1.9 0" id="main-camera">
         <a-cursor material="color: green" position="0 0 -3"></a-cursor>
       </a-camera>
+
+      <a-entity position="0 2.0 0" light="type: point; color: white; intensity: 1.0"></a-entity>
+      <!--<a-entity position="0 1 0"  light="type: directional; color: #ffde8d; intensity: 0.1"></a-entity>-->
+      <a-entity position="5.723776746883039 2.4690088371457293 -0.9873847998273488" light="type:point;color:#b3a7ff;distance:7"></a-entity>
+      <a-entity position="0 1.6215074404987453 -5.092228860347625" light="type:point;color:#ffde8d;intensity:0.5;distance:5"></a-entity>
 
       <a-entity obj-model="obj: #platform-obj; mtl: #platform-mtl" scale="0.5 1 0.5"></a-entity>
       <a-image id="hud" src="#hud-empty" transparent="true" width="1.0" height="0.333" position="-0.03289267211463166 1.5591924874946197 -0.3051888959272364" material="" geometry="" rotation="-48.72988717974592 0 0">
@@ -65,6 +75,16 @@
       </a-entity>
       <a-entity mixin="medium sphere-mixin group3 active-planet" position="-1.4437214214037262 1.8291215651294106 -7.538761159147235" rotation="0 14.859446097924646 0" event-set__click="_target: #hud; material.src: #haptics-article;">
         <a-entity mixin="text-mixin" text="value:Haptic Feedback" position="0 0.7 0" scale="5 5 5"></a-entity>
+      </a-entity>
+
+      <a-entity mixin="medium sphere-mixin group4 active-planet" position="6.281307101384147 1.59 -0.998628479986758" rotation="0 -75.99730732114921 0" event-set__click="_target: #hud; material.src: #graphics-article;">
+        <a-entity mixin="text-mixin" text="value:3D Graphics" position="0 0.7 0" scale="5 5 5"></a-entity>
+      </a-entity>
+      <a-entity mixin="medium sphere-mixin group4 active-planet" position="6.281307101384147 -0.0381919723111952 -2.0794235432585486" rotation="0 -63.93153021255698 0" event-set__click="_target: #hud; material.src: #graphics-article;">
+        <a-entity mixin="text-mixin" text="value:Rendering" position="0 0.7 0" scale="5 5 5"></a-entity>
+      </a-entity>
+      <a-entity mixin="medium sphere-mixin group4 active-planet" position="5.694288166519597 1.59 -3.6512803218770715" rotation="0 -57.1472397120078 0" event-set__click="_target: #hud; material.src: #graphics-article;">
+        <a-entity mixin="text-mixin" text="value:Games" position="0 0.7 0" scale="5 5 5"></a-entity>
       </a-entity>
 
     </a-scene>
