@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+
+<meta charset="utf-8" />
+<title>Hello, World! • A-Frame</title>
+<meta name="description" content="Hello, World! • A-Frame" />
+<script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+<script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v4.2.0/dist/aframe-extras.min.js"></script>
+<script src="./components/camera-cube-env.js"></script>
+<script src="./components/light-map-geometry.js"></script>
+
+</head>
+<body class="a-body ">
+<a-scene background="color:#5f5f5f" class="fullscreen" inspector="" keyboard-shortcuts="" screenshot="" vr-mode-ui="" shadow="autoUpdate: false; type:pcfsoft" stats="">
+
+
+<a-assets>
+	<!--<img id="museum-lightmap" src="./objects/lighting/lightmap-indirect.png">-->
+
+	<a-asset-item id="museum" src="./objects/Museum-new2.obj"></a-asset-item>
+	<a-asset-item id="museum-material" src="./objects/Museum-new2.mtl"></a-asset-item>
+	<a-asset-item id="cardboard-model" src="./objects/Cardboard-extended-phone-bezier2.gltf"></a-asset-item>
+</a-assets>
+
+<a-camera position="0.722 -1.16 -0.1" rotation="90 90 0"></a-camera>
+
+
+<a-entity id="cardboard-element" gltf-model="#cardboard-model" scale="0.0025 0.0025 0.0025" position="1.34 -0.8 0.018" rotation="0 0 0" animation-mixer="loop: pingpong;" >
+	<a-animation attribute="rotation" dur="30000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
+</a-entity>
+<a-entity id="museum-element" obj-model="obj: #museum;" material="roughness: 1.0; shader: flat;" light-map-geometry="path:./objects/lighting/lightmap-large.png"></a-entity>
+ 
+ <a-entity light="intensity: 0.8; type: ambient;"></a-entity>
+ <a-entity light="intensity:0.8" position="-14.3 8.242267076007929 19.06"></a-entity>
+ <!--<a-entity light="castShadow:true;intensity:0.32;shadowCameraTop:20;shadowCameraRight:20;shadowCameraBottom:-20;shadowCameraLeft:-20;shadowMapHeight:1024;shadowMapWidth:1024" position="-14.3 8.242267076007929 19.06"></a-entity>-->
+
+</a-scene>
+
+</body></html>
