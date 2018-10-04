@@ -20,33 +20,61 @@
 	<a-asset-item id="museum" src="./objects/Museum-big.obj"></a-asset-item>
 	<a-asset-item id="museum-material" src="./objects/Museum-big.mtl"></a-asset-item>
 	<a-asset-item id="cardboard-model" src="./objects/Cardboard-extended-phone-bezier2.gltf"></a-asset-item>
+	<a-asset-item id="display-case-model" src="./objects/DisplayCase.gltf"></a-asset-item>
+	<a-asset-item id="stereoscope-model" src="./objects/stereoscope/Stereoscope.gltf"></a-asset-item>
+	<a-asset-item id="info-panel-model" src="./objects/InfoPanel/InfoPanel.obj"></a-asset-item>
 	<img id="up-arrow" src="./objects/up-arrow.png">
+	<img id="down-arrow" src="./objects/down-arrow.png">
+	<img id="cardboard-info-panel" src="./objects/InfoPanel/InfoPanel-cardboard.png">
 </a-assets>
 
 <a-assets>
 	<a-mixin id="checkpoint" checkpoint geometry="primitive: box;" scale="1 0.1 1"></a-mixin>
+	<a-mixin id="invisible-checkpoint" checkpoint></a-mixin>
 </a-assets>
 
 <a-entity id="cam-rig" position="-2.5 0 2.2" movement-controls="controls: checkpoint" checkpoint-control>
-	<a-camera position="0 1.8 0" rotation="90 90 0">
+	<a-camera position="0 1.6 0" rotation="90 90 0">
 		<a-cursor material="color: green" position="0 0 -1"></a-cursor>
 	</a-camera>
 </a-entity>
 
-<a-entity id="checkpoints">
+<a-entity id="checkpoints" position="0 0.1 0">
 	<a-entity position="-2.5178076729460037 -0.0356165065070051 -0.9292373186840635" mixin="checkpoint"></a-entity>
-	<a-entity position="1.4155878108615232 2.523630780152866 2.881906581361904" geometry="primitive:plane" material="src:#up-arrow; transparent:true" scale="" rotation="0 -90 0" checkpoint-redirect="checkpoint:#upstairs-checkpoint"></a-entity>
 	<a-entity position="-6.616870200248092 -0.0356165065070051 3.7598904312771557" mixin="checkpoint"></a-entity>
 	<a-entity position="-6.872345545363848 -0.0356165065070051 -4.937082392869406" mixin="checkpoint"></a-entity>
 	<a-entity position="-10.78114843666098 -0.0356165065070051 -1.0092195639836363" mixin="checkpoint"></a-entity>
 	<a-entity position="-6.855974403070785 -0.0356165065070051 -8.743288910966832" mixin="checkpoint"></a-entity>
 	<a-entity position="-6.184635162475876 -0.0356165065070051 8.848219538638748" mixin="checkpoint"></a-entity>
-	<a-entity id="upstairs-checkpoint" position="4.314266082978328 3.5781486980809376 2.814900038467602" mixin="checkpoint"></a-entity>
+
+	<!-- Checkpoints for moving upstairs -->
+	<a-entity position="1.4155878108615232 2.523630780152866 2.881906581361904" geometry="primitive:plane" material="src:#up-arrow; transparent:true" scale="" rotation="0 -90 0" checkpoint-redirect="checkpoint:#upstairs-checkpoint"></a-entity>
+	<a-entity position="1.4155878108615232 2.523630780152866 -4.563491527175659" geometry="primitive:plane" material="src:#up-arrow; transparent:true" scale="" rotation="0 -90 0" checkpoint-redirect="checkpoint:#upstairs-checkpoint2"></a-entity>
+	<a-entity id="upstairs-checkpoint" position="4.314266082978328 3.5781486980809376 2.814900038467602" mixin="invisible-checkpoint"></a-entity>
+	<a-entity id="upstairs-checkpoint2" position="4.314266082978328 3.5781486980809376 -4.994424909255181" mixin="invisible-checkpoint"></a-entity>
+	<a-entity position="6.543364790976279 3.5781486980809376 -0.7868666628045258" mixin="checkpoint"></a-entity>
+
+	<!-- Checkpoints for moving downstairs -->
+	<a-entity id="downstairs-checkpoint" position="-2.5178076729460037 -0.0356165065070051 2.9964785634399043" mixin="invisible-checkpoint"></a-entity>
+	<a-entity id="downstairs-checkpoint2" position="-2.5178076729460037 -0.0356165065070051 -4.860840595914097" mixin="invisible-checkpoint"></a-entity>
+	<a-entity position="3.860052130730515 4.179528725719286 2.881906581361904" geometry="primitive:plane" material="src:#down-arrow;transparent:true" scale="" rotation="0 90 0" checkpoint-redirect="checkpoint:#downstairs-checkpoint"></a-entity>
+	<a-entity position="3.860052130730515 4.179528725719286 -4.794836715032867" geometry="primitive:plane" material="src:#down-arrow;transparent:true" scale="" rotation="0 90 0" checkpoint-redirect="checkpoint:#downstairs-checkpoint2"></a-entity>
 </a-entity>
 
-<a-entity id="cardboard-element" gltf-model="#cardboard-model" scale="0.0025 0.0025 0.0025" position="1.34 -0.8 0.018" rotation="0 0 0" animation-mixer="loop: pingpong;" >
+<a-entity obj-model="obj: #info-panel-model;" position="-10.83179801876479 0 3.408435342871951" material="src: #cardboard-info-panel; roghness: 1.0; color: #a4a4a4"></a-entity>
+<a-box scale="1 1.8 1" color="red" material="" geometry="" position="-10.663 0.914 0.831"></a-box>
+<a-entity gltf-model="#display-case-model" position="-10.83179801876479 0 2.408435342871951">
+	<a-entity id="cardboard-element" gltf-model="#cardboard-model" scale="0.005 0.005 0.005" position="0 1.6 0" rotation="0 0 0" animation-mixer="loop: pingpong;" >
 	<a-animation attribute="rotation" dur="30000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
 </a-entity>
+</a-entity>
+
+<a-entity gltf-model="#display-case-model" position="-10.83179801876479 0 -5.051011288737964">
+	<a-entity id="stereoscope-element" gltf-model="#stereoscope-model" scale="0.075 0.075 0.075" position="0 1 0" rotation="0 0 0">
+	<a-animation attribute="rotation" dur="30000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
+</a-entity>
+</a-entity>
+
 <a-entity id="museum-element" obj-model="obj: #museum;" material="roughness: 1.0; shader: flat;" light-map-geometry="path:./objects/lighting/lightmap-large.png" scale="1 1 1"></a-entity>
  
  <a-entity light="intensity: 0.8; type: ambient;"></a-entity>
