@@ -22,6 +22,7 @@
 	<a-asset-item id="cardboard-model" src="./objects/Cardboard-extended-phone-bezier2.gltf"></a-asset-item>
 	<a-asset-item id="display-case-model" src="./objects/DisplayCase.gltf"></a-asset-item>
 	<a-asset-item id="stereoscope-model" src="./objects/stereoscope/Stereoscope.gltf"></a-asset-item>
+	<a-asset-item id="sensorama-model" src="./objects/Sensorama/Sensorama.gltf"></a-asset-item>
 	<a-asset-item id="info-panel-model" src="./objects/InfoPanel/InfoPanel.obj"></a-asset-item>
 	<img id="up-arrow" src="./objects/up-arrow.png">
 	<img id="down-arrow" src="./objects/down-arrow.png">
@@ -48,6 +49,9 @@
 	<a-entity position="-6.184635162475876 -0.0356165065070051 8.848219538638748" mixin="checkpoint"></a-entity>
 	<a-entity id="cave-checkpoint-2" position="18.90956335118898 7.016 -2.1044648895624314" mixin="checkpoint"></a-entity>
 
+	<a-entity position="-1.2080250259075043 0.1394161488425687 -0.8255774685588375" geometry="primitive:plane" material="src:#up-arrow; transparent:true" scale="0.4462846360523244 0.4462846360523244 0.4462846360523244" rotation="0 -90 0" checkpoint-redirect="checkpoint:#sensorama-checkpoint"></a-entity>
+	<a-entity id="sensorama-checkpoint" position="-0.8615544739441042 -0.036 -0.8223820480199469" mixin="invisible-checkpoint"></a-entity>
+
 	<!-- Checkpoints for moving downstairs -->
 	<a-entity id="downstairs-checkpoint" position="-2.5178076729460037 -0.0356165065070051 2.9964785634399043" mixin="invisible-checkpoint"></a-entity>
 	<a-entity id="downstairs-checkpoint2" position="-2.5178076729460037 -0.0356165065070051 -4.860840595914097" mixin="invisible-checkpoint"></a-entity>
@@ -71,6 +75,7 @@
 
 </a-entity>
 
+<!-- CARDBOARD -->
 <a-entity obj-model="obj: #info-panel-model;" position="-10.83179801876479 0 3.408435342871951" material="src: #cardboard-info-panel; roghness: 1.0; color: #a4a4a4"></a-entity>
 <a-box scale="1 1.8 1" color="red" material="" geometry="" position="-10.663 0.914 0.831"></a-box>
 <a-entity gltf-model="#display-case-model" position="-10.83179801876479 0 2.408435342871951">
@@ -78,13 +83,16 @@
 	<a-animation attribute="rotation" dur="30000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
 </a-entity>
 </a-entity>
-
+<!-- STEREOSCOPE -->
 <a-entity gltf-model="#display-case-model" position="-10.83179801876479 0 -5.051011288737964">
 	<a-entity id="stereoscope-element" gltf-model="#stereoscope-model" scale="0.075 0.075 0.075" position="0 1 0" rotation="0 0 0">
 	<a-animation attribute="rotation" dur="30000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
 </a-entity>
 </a-entity>
+<!-- SENSORAMA -->
+<a-entity id="sensorama-element" gltf-model="#sensorama-model" position="0 0 -0.8370208616883925" rotation="0 -90 0" animation-mixer="loop: repeat;"></a-entity>
 
+<!-- MUSEUM MODEL -->
 <a-entity id="museum-element" obj-model="obj: #museum;" material="roughness: 1.0; shader: flat;" light-map-geometry="path:./objects/lighting/lightmap-large.png" scale="1 1 1"></a-entity>
  
  <a-entity light="intensity: 0.8; type: ambient;"></a-entity>
