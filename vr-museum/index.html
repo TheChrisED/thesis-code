@@ -46,6 +46,13 @@
 	<a-entity position="-10.78114843666098 -0.0356165065070051 -1.0092195639836363" mixin="checkpoint"></a-entity>
 	<a-entity position="-6.855974403070785 -0.0356165065070051 -8.743288910966832" mixin="checkpoint"></a-entity>
 	<a-entity position="-6.184635162475876 -0.0356165065070051 8.848219538638748" mixin="checkpoint"></a-entity>
+	<a-entity id="cave-checkpoint-2" position="18.90956335118898 7.016 -2.1044648895624314" mixin="checkpoint"></a-entity>
+
+	<!-- Checkpoints for moving downstairs -->
+	<a-entity id="downstairs-checkpoint" position="-2.5178076729460037 -0.0356165065070051 2.9964785634399043" mixin="invisible-checkpoint"></a-entity>
+	<a-entity id="downstairs-checkpoint2" position="-2.5178076729460037 -0.0356165065070051 -4.860840595914097" mixin="invisible-checkpoint"></a-entity>
+	<a-entity position="3.860052130730515 4.179528725719286 2.881906581361904" geometry="primitive:plane" material="src:#down-arrow;transparent:true" scale="" rotation="0 90 0" checkpoint-redirect="checkpoint:#downstairs-checkpoint"></a-entity>
+	<a-entity position="3.860052130730515 4.179528725719286 -4.794836715032867" geometry="primitive:plane" material="src:#down-arrow;transparent:true" scale="" rotation="0 90 0" checkpoint-redirect="checkpoint:#downstairs-checkpoint2"></a-entity>
 
 	<!-- Checkpoints for moving upstairs -->
 	<a-entity position="1.4155878108615232 2.523630780152866 2.881906581361904" geometry="primitive:plane" material="src:#up-arrow; transparent:true" scale="" rotation="0 -90 0" checkpoint-redirect="checkpoint:#upstairs-checkpoint"></a-entity>
@@ -54,11 +61,14 @@
 	<a-entity id="upstairs-checkpoint2" position="4.314266082978328 3.5781486980809376 -4.994424909255181" mixin="invisible-checkpoint"></a-entity>
 	<a-entity position="6.543364790976279 3.5781486980809376 -0.7868666628045258" mixin="checkpoint"></a-entity>
 
-	<!-- Checkpoints for moving downstairs -->
-	<a-entity id="downstairs-checkpoint" position="-2.5178076729460037 -0.0356165065070051 2.9964785634399043" mixin="invisible-checkpoint"></a-entity>
-	<a-entity id="downstairs-checkpoint2" position="-2.5178076729460037 -0.0356165065070051 -4.860840595914097" mixin="invisible-checkpoint"></a-entity>
-	<a-entity position="3.860052130730515 4.179528725719286 2.881906581361904" geometry="primitive:plane" material="src:#down-arrow;transparent:true" scale="" rotation="0 90 0" checkpoint-redirect="checkpoint:#downstairs-checkpoint"></a-entity>
-	<a-entity position="3.860052130730515 4.179528725719286 -4.794836715032867" geometry="primitive:plane" material="src:#down-arrow;transparent:true" scale="" rotation="0 90 0" checkpoint-redirect="checkpoint:#downstairs-checkpoint2"></a-entity>
+	<!-- Checkpoints for moving to the CAVE -->
+	<a-entity position="14.556654535163842 6.054706850790381 -0.702" geometry="primitive:plane" material="src:#up-arrow; transparent:true" scale="" rotation="0 -90 0" checkpoint-redirect="checkpoint:#cave-checkpoint"></a-entity>
+	<a-entity id="cave-checkpoint" position="17.205947758081194 7.01603423993263 -0.7881247324653948" mixin="invisible-checkpoint"></a-entity>
+
+	<!-- Checkpoints for moving down from the CAVE -->
+	<a-entity position="16.015909740798655 7.922502410463461 -0.702" geometry="primitive:plane" material="src:#down-arrow; transparent:true" scale="" rotation="0 90 0" checkpoint-redirect="checkpoint:#upstairs-checkpoint3"></a-entity>
+	<a-entity id="upstairs-checkpoint3" position="10.64282173356897 3.5781486980809376 -0.7881247324653948" mixin="invisible-checkpoint" checkpoint=""></a-entity>
+
 </a-entity>
 
 <a-entity obj-model="obj: #info-panel-model;" position="-10.83179801876479 0 3.408435342871951" material="src: #cardboard-info-panel; roghness: 1.0; color: #a4a4a4"></a-entity>
