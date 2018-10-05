@@ -29,6 +29,7 @@
 
 	<img id="cardboard-info-panel" src="./objects/InfoPanel/InfoPanel-cardboard.png">
 	<img id="stereoscope-info-panel" src="./objects/InfoPanel/InfoPanel-stereoscope.png">
+	<img id="sensorama-info-panel" src="./objects/InfoPanel/InfoPanel-sensorama.png">
 </a-assets>
 
 <a-assets>
@@ -43,7 +44,7 @@
 </a-entity>
 
 <a-entity id="checkpoints" position="0 0.1 0">
-	<a-entity position="-2.5178076729460037 -0.0356165065070051 -0.9292373186840635" mixin="checkpoint"></a-entity>
+	<a-entity position="-2.518 -0.036 -1.2755538148222514" mixin="checkpoint"></a-entity>
 	<a-entity position="-6.616870200248092 -0.0356165065070051 3.7598904312771557" mixin="checkpoint"></a-entity>
 	<a-entity position="-6.872345545363848 -0.0356165065070051 -4.937082392869406" mixin="checkpoint"></a-entity>
 	<a-entity position="-10.78114843666098 -0.0356165065070051 -1.0092195639836363" mixin="checkpoint"></a-entity>
@@ -51,8 +52,10 @@
 	<a-entity position="-6.184635162475876 -0.0356165065070051 8.848219538638748" mixin="checkpoint"></a-entity>
 	<a-entity id="cave-checkpoint-2" position="18.90956335118898 7.016 -2.1044648895624314" mixin="checkpoint"></a-entity>
 
-	<a-entity position="-1.2080250259075043 0.1394161488425687 -0.8255774685588375" geometry="primitive:plane" material="src:#up-arrow; transparent:true" scale="0.4462846360523244 0.4462846360523244 0.4462846360523244" rotation="0 -90 0" checkpoint-redirect="checkpoint:#sensorama-checkpoint"></a-entity>
-	<a-entity id="sensorama-checkpoint" position="-0.8615544739441042 -0.036 -0.8223820480199469" mixin="invisible-checkpoint"></a-entity>
+	<a-entity position="-1.2080250259075043 0.1394161488425687 -1.2727959931044912" geometry="primitive:plane" material="src:#up-arrow; transparent:true" scale="0.4462846360523244 0.4462846360523244 0.4462846360523244" rotation="0 -90 0" checkpoint-redirect="checkpoint:#sensorama-checkpoint"></a-entity>
+	<a-entity id="sensorama-checkpoint" position="-0.8615544739441042 -0.036 -1.299591740143264" mixin="invisible-checkpoint"></a-entity>
+	<a-entity position="-0.9507533467668365 0.1394161488425687 -1.0215288154661473" geometry="primitive:plane" material="src:#up-arrow; transparent:true" scale="0.4462846360523244 0.4462846360523244 0.4462846360523244" checkpoint-redirect="checkpoint:#sensorama-checkpoint"></a-entity>
+	<a-entity position="-0.8843461253209446 -0.0356165065070051 0.030208324029487033" mixin="checkpoint"></a-entity>
 
 	<!-- Checkpoints for moving downstairs -->
 	<a-entity id="downstairs-checkpoint" position="-2.5178076729460037 -0.0356165065070051 2.9964785634399043" mixin="invisible-checkpoint"></a-entity>
@@ -93,7 +96,8 @@
 </a-entity>
 </a-entity>
 <!-- SENSORAMA -->
-<a-entity id="sensorama-element" gltf-model="#sensorama-model" position="0 0 -0.8370208616883925" rotation="0 -90 0" animation-mixer="loop: repeat;"></a-entity>
+<a-entity obj-model="obj: #info-panel-model;" position="0.052332923589279545 0 0.03929312826689135" rotation="0 -90 0" material="src: #sensorama-info-panel; roghness: 1.0; color: #a4a4a4"></a-entity>
+<a-entity id="sensorama-element" gltf-model="#sensorama-model" position="0 0 -1.2882008433383965" rotation="0 -90 0" animation-mixer="loop: repeat;"></a-entity>
 
 <!-- MUSEUM MODEL -->
 <a-entity id="museum-element" obj-model="obj: #museum;" material="roughness: 1.0; shader: flat;" light-map-geometry="path:./objects/lighting/lightmap-large.png" scale="1 1 1"></a-entity>
