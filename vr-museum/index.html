@@ -26,7 +26,9 @@
 	<a-asset-item id="info-panel-model" src="./objects/InfoPanel/InfoPanel.obj"></a-asset-item>
 	<img id="up-arrow" src="./objects/up-arrow.png">
 	<img id="down-arrow" src="./objects/down-arrow.png">
+
 	<img id="cardboard-info-panel" src="./objects/InfoPanel/InfoPanel-cardboard.png">
+	<img id="stereoscope-info-panel" src="./objects/InfoPanel/InfoPanel-stereoscope.png">
 </a-assets>
 
 <a-assets>
@@ -84,6 +86,7 @@
 </a-entity>
 </a-entity>
 <!-- STEREOSCOPE -->
+<a-entity obj-model="obj: #info-panel-model;" position="-10.879579794140438 0 -4.277941023739183" material="src: #stereoscope-info-panel; roghness: 1.0; color: #a4a4a4"></a-entity>
 <a-entity gltf-model="#display-case-model" position="-10.83179801876479 0 -5.051011288737964">
 	<a-entity id="stereoscope-element" gltf-model="#stereoscope-model" scale="0.075 0.075 0.075" position="0 1 0" rotation="0 0 0">
 	<a-animation attribute="rotation" dur="30000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
