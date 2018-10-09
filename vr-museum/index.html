@@ -17,13 +17,14 @@
 <a-assets>
 	<!--<img id="museum-lightmap" src="./objects/lighting/lightmap-indirect.png">-->
 
-	<a-asset-item id="museum" src="./objects/Museum-big.obj"></a-asset-item>
+	<a-asset-item id="museum" src="./objects/Museum-noMaterials.obj"></a-asset-item>
 	<a-asset-item id="museum-material" src="./objects/Museum-big.mtl"></a-asset-item>
 	<a-asset-item id="cardboard-model" src="./objects/Cardboard-extended-phone-bezier2.gltf"></a-asset-item>
 	<a-asset-item id="display-case-model" src="./objects/DisplayCase.gltf"></a-asset-item>
 	<a-asset-item id="stereoscope-model" src="./objects/stereoscope/Stereoscope.gltf"></a-asset-item>
 	<a-asset-item id="sensorama-model" src="./objects/Sensorama/Sensorama.gltf"></a-asset-item>
 	<a-asset-item id="info-panel-model" src="./objects/InfoPanel/InfoPanel.obj"></a-asset-item>
+	<a-asset-item id="damocles-model" src="./objects/Damocles/Damocles.gltf"></a-asset-item>
 	<img id="up-arrow" src="./objects/up-arrow.png">
 	<img id="down-arrow" src="./objects/down-arrow.png">
 
@@ -43,7 +44,7 @@
 	</a-camera>
 </a-entity>
 
-<a-entity id="checkpoints" position="0 0.1 0">
+<a-entity id="checkpoints" position="0 0.1 0" visible="true">
 	<a-entity position="-2.518 -0.036 -1.2755538148222514" mixin="checkpoint"></a-entity>
 	<a-entity position="-6.616870200248092 -0.0356165065070051 3.7598904312771557" mixin="checkpoint"></a-entity>
 	<a-entity position="-6.872345545363848 -0.0356165065070051 -4.937082392869406" mixin="checkpoint"></a-entity>
@@ -81,6 +82,7 @@
 </a-entity>
 
 <!-- CARDBOARD -->
+
 <a-entity obj-model="obj: #info-panel-model;" position="-10.83179801876479 0 3.408435342871951" material="src: #cardboard-info-panel; roghness: 1.0; color: #a4a4a4"></a-entity>
 <a-box scale="1 1.8 1" color="red" material="" geometry="" position="-10.663 0.914 0.831"></a-box>
 <a-entity gltf-model="#display-case-model" position="-10.83179801876479 0 2.408435342871951">
@@ -98,9 +100,13 @@
 <!-- SENSORAMA -->
 <a-entity obj-model="obj: #info-panel-model;" position="0.052332923589279545 0 0.03929312826689135" rotation="0 -90 0" material="src: #sensorama-info-panel; roghness: 1.0; color: #a4a4a4"></a-entity>
 <a-entity id="sensorama-element" gltf-model="#sensorama-model" position="0 0 -1.2882008433383965" rotation="0 -90 0" animation-mixer="loop: repeat;"></a-entity>
+<!-- SWORD OF DAMOCLES -->
+<a-entity id="damocles-element" gltf-model="#damocles-model" position="-6.684699959364813 1.6 -7.271179533178877" rotation="0 90 0"></a-entity>
+
 
 <!-- MUSEUM MODEL -->
 <a-entity id="museum-element" obj-model="obj: #museum;" material="roughness: 1.0; shader: flat;" light-map-geometry="path:./objects/lighting/lightmap-large.png" scale="1 1 1"></a-entity>
+
  
  <a-entity light="intensity: 0.8; type: ambient;"></a-entity>
  <a-entity light="intensity:0.8" position="-14.3 8.242267076007929 19.06"></a-entity>
