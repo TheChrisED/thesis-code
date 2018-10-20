@@ -83,7 +83,7 @@
 
 <!-- CARDBOARD -->
 
-<a-entity obj-model="obj: #info-panel-model;" position="-10.83179801876479 0 3.408435342871951" material="src: #cardboard-info-panel; roghness: 1.0; color: #a4a4a4"></a-entity>
+<a-entity obj-model="obj: #info-panel-model;" position="-10.83179801876479 0 3.408435342871951" material="src: #cardboard-info-panel; roghness: 1.0; color: #a4a4a4" anisotropic-filtering></a-entity>
 <a-box scale="1 1.8 1" color="red" material="" geometry="" position="-10.663 0.914 0.831"></a-box>
 <a-entity gltf-model="#display-case-model" position="-10.83179801876479 0 2.408435342871951">
 	<a-entity id="cardboard-element" gltf-model="#cardboard-model" scale="0.005 0.005 0.005" position="0 1.6 0" rotation="0 0 0" animation-mixer="loop: pingpong;" >
@@ -91,14 +91,14 @@
 </a-entity>
 </a-entity>
 <!-- STEREOSCOPE -->
-<a-entity obj-model="obj: #info-panel-model;" position="-10.879579794140438 0 -4.277941023739183" material="src: #stereoscope-info-panel; roghness: 1.0; color: #a4a4a4"></a-entity>
+<a-entity obj-model="obj: #info-panel-model;" position="-10.879579794140438 0 -4.277941023739183" material="src: #stereoscope-info-panel; roghness: 1.0; color: #a4a4a4" anisotropic-filtering></a-entity>
 <a-entity gltf-model="#display-case-model" position="-10.83179801876479 0 -5.051011288737964">
 	<a-entity id="stereoscope-element" gltf-model="#stereoscope-model" scale="0.075 0.075 0.075" position="0 1 0" rotation="0 0 0">
 	<a-animation attribute="rotation" dur="30000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
 </a-entity>
 </a-entity>
 <!-- SENSORAMA -->
-<a-entity obj-model="obj: #info-panel-model;" position="0.052332923589279545 0 0.03929312826689135" rotation="0 -90 0" material="src: #sensorama-info-panel; roghness: 1.0; color: #a4a4a4"></a-entity>
+<a-entity obj-model="obj: #info-panel-model;" position="0.052332923589279545 0 0.03929312826689135" rotation="0 -90 0" material="src: #sensorama-info-panel; roghness: 1.0; color: #a4a4a4" anisotropic-filtering></a-entity>
 <a-entity id="sensorama-element" gltf-model="#sensorama-model" position="0 0 -1.2882008433383965" rotation="0 -90 0" animation-mixer="loop: repeat;"></a-entity>
 <!-- SWORD OF DAMOCLES -->
 <a-entity id="damocles-element" gltf-model="#damocles-model" position="-6.684699959364813 1.6 -7.271179533178877" rotation="0 90 0"></a-entity>
