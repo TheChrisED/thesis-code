@@ -11,7 +11,7 @@
 
 </head>
 <body class="a-body ">
-<a-scene background="color:#5f5f5f" class="fullscreen" inspector="" keyboard-shortcuts="" screenshot="" vr-mode-ui="" shadow="autoUpdate: false; type:pcfsoft" stats="">
+<a-scene background="color:#5f5f5f" class="fullscreen" inspector="" keyboard-shortcuts="" screenshot="" vr-mode-ui="" shadow="autoUpdate: false; type:pcfsoft" stats="false">
 
 
 <a-assets>
@@ -46,9 +46,9 @@
 
 <a-entity id="checkpoints" position="0 0.1 0" visible="true">
 	<a-entity position="-2.518 -0.036 -1.2755538148222514" mixin="checkpoint"></a-entity>
-	<a-entity position="-6.616870200248092 -0.0356165065070051 3.7598904312771557" mixin="checkpoint"></a-entity>
+	<a-entity position="-10.784390311712764 -0.036 0.6631138527328764" mixin="checkpoint"></a-entity>
 	<a-entity position="-6.872345545363848 -0.0356165065070051 -4.937082392869406" mixin="checkpoint"></a-entity>
-	<a-entity position="-10.78114843666098 -0.0356165065070051 -1.0092195639836363" mixin="checkpoint"></a-entity>
+	<a-entity position="-10.78114843666098 -0.0356165065070051 -3.2782625751084664" mixin="checkpoint"></a-entity>
 	<a-entity position="-6.855974403070785 -0.0356165065070051 -8.743288910966832" mixin="checkpoint"></a-entity>
 	<a-entity position="-6.184635162475876 -0.0356165065070051 8.848219538638748" mixin="checkpoint"></a-entity>
 	<a-entity id="cave-checkpoint-2" position="18.90956335118898 7.016 -2.1044648895624314" mixin="checkpoint"></a-entity>
@@ -83,8 +83,9 @@
 
 <!-- CARDBOARD -->
 
-<a-entity obj-model="obj: #info-panel-model;" position="-10.83179801876479 0 3.408435342871951" material="src: #cardboard-info-panel; roghness: 1.0; color: #a4a4a4" anisotropic-filtering></a-entity>
-<a-box scale="1 1.8 1" color="red" material="" geometry="" position="-10.663 0.914 0.831"></a-box>
+<!--<a-entity obj-model="obj: #info-panel-model;" position="-10.83179801876479 0 3.408435342871951" material="src: #cardboard-info-panel; roghness: 1.0; color: #a4a4a4" anisotropic-filtering></a-entity>-->
+<a-entity obj-model="obj: #info-panel-model;" position="-10.83179801876479 0 1.6692219044798349" material="src: #cardboard-info-panel; roghness: 1.0; color: #a4a4a4" anisotropic-filtering rotation="0 180 0"></a-entity>
+<!--<a-box scale="1 1.8 1" color="red" material="" geometry="" position="-10.663 0.914 0.831"></a-box>-->
 <a-entity gltf-model="#display-case-model" position="-10.83179801876479 0 2.408435342871951">
 	<a-entity id="cardboard-element" gltf-model="#cardboard-model" scale="0.005 0.005 0.005" position="0 1.6 0" rotation="0 0 0" animation-mixer="loop: pingpong;" >
 	<a-animation attribute="rotation" dur="30000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
